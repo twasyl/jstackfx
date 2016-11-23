@@ -1,0 +1,44 @@
+group 'io.twasyl'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'de.jensd:fontawesomefx-octicons:3.3.0-2'
+    testCompile 'junit:junit:4.12'
+}
+
+wrapper {
+    gradleVersion = '3.2'
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "JStackFX",
+                "Implementation-Version": version,
+                "Implementation-Vendor": "Thierry Wasylczenko",
+                "Main-Class": "io.twasyl.jstackfx.JStackFX",
+                "JavaFX-Version": "8.0+",
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' '))
+    }
+}
+
+distributions {
+    main {
+        baseName = "JStackFX"
+        contents {
+            into('/') {
+                from jar
+                from project.configurations.compile
+            }
+        }
+    }
+}

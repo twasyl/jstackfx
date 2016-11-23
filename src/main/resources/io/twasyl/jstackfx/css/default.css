@@ -1,0 +1,42 @@
+.root {
+    -fx-thread-new: #337ab7;
+    -fx-thread-runnable: #5cb85c;
+    -fx-thread-waiting: #f0ad4e;
+    -fx-thread-blocked: #d9534f;
+    -fx-thread-terminated: #5bc0de;
+}
+
+/** Table Cells */
+.table-view *.glyph-icon { -fx-fill: white; }
+
+.cell {
+    -fx-border-width: 0;
+    -fx-text-fill: white;
+}
+
+.table-row-cell *.centered-cell { -fx-alignment: center; }
+
+.state-cell { -fx-alignment: baseline-center; }
+
+.cell:new { -fx-background-color: -fx-thread-new; }
+.cell:new:focused { -fx-background-color: derive(-fx-thread-new, -20%); }
+
+.cell:runnable { -fx-background-color: -fx-thread-runnable; }
+.cell:runnable:focused { -fx-background-color: derive(-fx-thread-runnable, -20%); }
+
+.cell:waiting, .cell:timed-waiting { -fx-background-color: -fx-thread-waiting; }
+.cell:waiting:focused, .cell:timed-waiting:focused { -fx-background-color: derive(-fx-thread-waiting, -20%); }
+.cell:waiting .label, .cell:timed-waiting .label { -fx-fill: white; }
+
+.cell:blocked { -fx-background-color: -fx-thread-blocked; }
+.cell:blocked:focused { -fx-background-color: derive(-fx-thread-blocked, -20%); }
+
+.cell:terminated { -fx-background-color: -fx-thread-terminated; }
+.cell:terminated:focused { -fx-background-color: derive(-fx-thread-terminated, -20%); }
+
+/** Pie Chart customization */
+.data0.chart-pie { -fx-pie-color: -fx-thread-new; }
+.data1.chart-pie { -fx-pie-color: -fx-thread-runnable; }
+.data2.chart-pie { -fx-pie-color: -fx-thread-waiting; }
+.data3.chart-pie { -fx-pie-color: -fx-thread-blocked; }
+.data4.chart-pie { -fx-pie-color: -fx-thread-terminated; }

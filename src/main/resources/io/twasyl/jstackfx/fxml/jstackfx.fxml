@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.octicons.OctIconView?>
+<?import io.twasyl.jstackfx.ui.cells.StateCellFactory?>
+<?import io.twasyl.jstackfx.ui.cells.ThreadInformationRowFactory?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.TextFlow?>
+<?import java.net.URL?>
+<BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
+    <stylesheets>
+        <URL value="@/io/twasyl/jstackfx/css/default.css" />
+    </stylesheets>
+
+    <top>
+        <ToolBar>
+            <Button onAction="#chooseDumpToOpen">
+                <graphic>
+                    <OctIconView glyphName="FILE_TEXT" glyphSize="20" />
+                </graphic>
+            </Button>
+        </ToolBar>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.75" orientation="HORIZONTAL">
+
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefWidth="800">
+
+                <TableView fx:id="threadInformations" editable="false">
+                    <columns>
+                        <TableColumn prefWidth="50" sortable="false" text="State">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="state" />
+                            </cellValueFactory>
+                            <cellFactory>
+                                <StateCellFactory />
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="50" sortable="false" text="#" styleClass="centered-cell">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="number" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="300" sortable="false" text="Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                    <rowFactory>
+                        <ThreadInformationRowFactory />
+                    </rowFactory>
+                </TableView>
+
+                <ScrollPane>
+                    <TextFlow fx:id="threadInformationsDetails">
+                        <padding>
+                            <Insets bottom="5" left="5" right="5" top="5" />
+                        </padding>
+                    </TextFlow>
+                </ScrollPane>
+            </SplitPane>
+
+            <SplitPane dividerPositions="0.3, 0.65" orientation="VERTICAL">
+                <TextFlow fx:id="dumpInformations">
+                    <padding>
+                        <Insets bottom="5" left="5" right="5" top="5" />
+                    </padding>
+                </TextFlow>
+                <PieChart fx:id="threadsRepartition" title="Thread repartition by state" labelsVisible="false" />
+                <PieChart fx:id="mostLockedSynchronizers" title="Locked synchronizers repartition" labelsVisible="false" />
+            </SplitPane>
+
+        </SplitPane>
+    </center>
+</BorderPane>
