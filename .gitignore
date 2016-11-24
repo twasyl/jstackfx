@@ -1,0 +1,15 @@
+# IntelliJ IDEA files
+out
+.idea
+*.iml
+**/*.iml
+
+# gradle files
+.gradle/
+gradle.properties
+**/gradle.properties
+build
+**/build/
+
+# Error files generated when JavaFX crashes
+hs_err_*

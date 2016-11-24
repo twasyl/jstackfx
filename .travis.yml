@@ -1,7 +1,12 @@
 language: java
 
+sudo: false
+
 jdk:
   - oraclejdk8
+
+os:
+  - linux
 
 git:
   depth: 5
@@ -9,10 +14,6 @@ git:
 branches:
  only:
   - master
-
-sudo: required
-
-install: true
 
 script:
   - chmod +x ./gradlew
