@@ -30,3 +30,7 @@ In order to start JStackFX and open directly a dump file you can use the followi
 ```shell
 java -jar jstackfx-<version>.jar --file=/path/to/dump.txt
 ```
+
+# Screenshot
+
+![Screenshot of JStackFX](JStackFX.png)
