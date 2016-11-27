@@ -14,6 +14,8 @@
     -fx-text-fill: white;
 }
 
+.cell *.text { -fx-text-fill: white; -fx-fill: white; }
+
 .table-row-cell *.centered-cell { -fx-alignment: center; }
 
 .state-cell { -fx-alignment: baseline-center; }

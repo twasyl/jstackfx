@@ -4,10 +4,7 @@ import io.twasyl.jstackfx.beans.LockedSynchronizer;
 import io.twasyl.jstackfx.beans.Pair;
 import io.twasyl.jstackfx.beans.ThreadInformation;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +23,8 @@ public class ThreadInformationFactory {
     protected static final Pattern CALLING_STACK_LINE_MATCHER = Pattern.compile("^\\sat ([a-zA-Z\\.\\$]+)\\([a-zA-Z0-9 \\.:\\$]+\\)");
     protected static final Pattern LOCKED_OWNALBLE_SYNCHRONIZERS_START = Pattern.compile("^\\s+Locked ownable synchronizers:");
     protected static final Pattern LOCKED_SYNCHRONIZER_PATTERN = Pattern.compile("^\\s+-\\s<(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
+    protected static final Pattern HOLDING_LOCKS_PATTERN = Pattern.compile("^\\s+- locked <(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
+    protected static final Pattern WAITING_TO_LOCK_PATTERN = Pattern.compile("^\\s+- waiting to lock <(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
 
     public static ThreadInformation build(final List<String> lines) {
         final ThreadInformation element = new ThreadInformation();
@@ -44,6 +43,8 @@ public class ThreadInformationFactory {
 
         element.setCallingStack(extractCallingStack(lines));
         element.getLockedSynchronizers().addAll(extractLockedSynchronizersFrom(lines));
+        element.getHoldingLocks().addAll(extractHoldingLocks(lines));
+        element.getWaitingToLock().addAll(extractWaitingToLock(lines));
 
         return element;
     }
@@ -158,4 +159,39 @@ public class ThreadInformationFactory {
 
         return synchronizers;
     }
+
+    protected static Set<LockedSynchronizer> extractWaitingToLock(final List<String> lines) {
+        final Set<LockedSynchronizer> waitingToLock = new LinkedHashSet<>();
+
+        for (final String line : lines) {
+            final Matcher waitingToLockMatcher = WAITING_TO_LOCK_PATTERN.matcher(line);
+
+            if(waitingToLockMatcher.matches()) {
+                final LockedSynchronizer synchronizer = new LockedSynchronizer();
+                synchronizer.setThreadId(waitingToLockMatcher.group(1));
+                synchronizer.setClassName(waitingToLockMatcher.group(2));
+                waitingToLock.add(synchronizer);
+            }
+        }
+
+        return waitingToLock;
+    }
+
+    protected static Set<LockedSynchronizer> extractHoldingLocks(final List<String> lines) {
+        final Set<LockedSynchronizer> holdingLocks = new LinkedHashSet<>();
+
+        for (final String line : lines) {
+            final Matcher holdingLocksMatcher = HOLDING_LOCKS_PATTERN.matcher(line);
+
+            if(holdingLocksMatcher.matches()) {
+                final LockedSynchronizer synchronizer = new LockedSynchronizer();
+                synchronizer.setThreadId(holdingLocksMatcher.group(1));
+                synchronizer.setClassName(holdingLocksMatcher.group(2));
+                holdingLocks.add(synchronizer);
+            }
+        }
+
+        return holdingLocks;
+    }
+
 }

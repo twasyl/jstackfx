@@ -52,7 +52,7 @@ public class JStackFX extends Application {
 
         stage.setScene(scene);
         stage.setTitle("JStackFX");
-        stage.setMaximized(true);
+//        stage.setMaximized(true);
         stage.show();
     }
 

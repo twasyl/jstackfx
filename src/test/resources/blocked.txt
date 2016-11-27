@@ -1,0 +1,52 @@
+2016-11-22 20:30:25
+Full thread dump OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
+
+"DEADLOCK_TEST-1" #3 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+	- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+	- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+	- None
+
+"DEADLOCK_TEST-2" #2 daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+	- waiting to lock <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+	- locked <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+	- <0x00000000e598a610> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
+"DEADLOCK_TEST-3" #1 daemon prio=6 tid=0x0000000006859000 nid=0x25dc waiting for monitor entry [0x000000000825f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+	- waiting to lock <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+	- locked <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+	- None
+
+"VM Thread" os_prio=31 tid=0x00007f84650dc000 nid=0x3c03 runnable
+
+"Gang worker#0 (Parallel GC Threads)" os_prio=31 tid=0x00007f8464816800 nid=0x3203 runnable
+
+"Gang worker#1 (Parallel GC Threads)" os_prio=31 tid=0x00007f8464817000 nid=0x3403 runnable
+
+"Gang worker#2 (Parallel GC Threads)" os_prio=31 tid=0x00007f8465011000 nid=0x3603 runnable
+
+"Gang worker#3 (Parallel GC Threads)" os_prio=31 tid=0x00007f8464817800 nid=0x3803 runnable
+
+"Concurrent Mark-Sweep GC Thread" os_prio=31 tid=0x00007f846484e800 nid=0x3a03 runnable
+
+"VM Periodic Task Thread" os_prio=31 tid=0x00007f846582c800 nid=0x5103 waiting on condition
+
+JNI global references: 4957
+

@@ -90,6 +90,7 @@ public class JStackFXController implements Initializable {
     protected void updateDumpInformations(final Dump dump) {
         this.dumpInformations.getChildren().clear();
         this.dumpInformations.getChildren().addAll(dump.asText());
+        this.dumpInformations.setUserData(dump);
     }
 
     protected void updateThreadRepartionChart(final Dump dump) {

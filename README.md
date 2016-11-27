@@ -33,4 +33,5 @@ java -jar jstackfx-<version>.jar --file=/path/to/dump.txt
 
 # Screenshot
 
-![Screenshot of JStackFX](JStackFX.png)
+![Screenshot of JStackFX](src/site/screenshots/JStackFX_01.png)
+![Screenshot of JStackFX](src/site/screenshots/JStackFX_02.png)

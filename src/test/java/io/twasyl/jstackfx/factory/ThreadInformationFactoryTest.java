@@ -106,7 +106,7 @@ public class ThreadInformationFactoryTest {
     }
 
     @Test
-    public void extractLockedSyncrhonizersWhenNone() {
+    public void extractLockedSynchronizersWhenNone() {
         final List<String> lines = new ArrayList<>();
         lines.add("\"process reaper\" #1054 daemon prio=10 os_prio=0 tid=0x00007f3f151a8800 nid=0x637d waiting on condition [0x00007f3f01b3a000]");
         lines.add("   java.lang.Thread.State: TIMED_WAITING (parking)");
@@ -129,7 +129,7 @@ public class ThreadInformationFactoryTest {
     }
 
     @Test
-    public void extractLockedSyncrhonizersWhenNotPresent() {
+    public void extractLockedSynchronizersWhenNotPresent() {
         final List<String> lines = new ArrayList<>();
         lines.add("\"process reaper\" #1054 daemon prio=10 os_prio=0 tid=0x00007f3f151a8800 nid=0x637d waiting on condition [0x00007f3f01b3a000]");
         lines.add("   java.lang.Thread.State: TIMED_WAITING (parking)");
@@ -150,7 +150,7 @@ public class ThreadInformationFactoryTest {
     }
 
     @Test
-    public void extractLockedSyncrhonizers() {
+    public void extractLockedSynchronizers() {
         final List<String> lines = new ArrayList<>();
         lines.add("\"process reaper\" #1054 daemon prio=10 os_prio=0 tid=0x00007f3f151a8800 nid=0x637d waiting on condition [0x00007f3f01b3a000]");
         lines.add("   java.lang.Thread.State: TIMED_WAITING (parking)");
@@ -182,5 +182,107 @@ public class ThreadInformationFactoryTest {
         synchronizer = iterator.next();
         assertEquals("0x00000000cfa47921", synchronizer.getThreadId());
         assertEquals("java.util.concurrent.ThreadPoolExecutor$Worker", synchronizer.getClassName());
+    }
+
+    @Test
+    public void extractHoldingLocks() {
+        final List<String> lines = new ArrayList<>();
+
+        lines.add("\"DEADLOCK_TEST-1\" #3 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]");
+        lines.add("   java.lang.Thread.State: BLOCKED (on object monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)");
+        lines.add("\t- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e90> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:192)");
+        lines.add("\t- locked <0x00000007d58f5e98> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:170)");
+        lines.add("");
+        lines.add("   Locked ownable synchronizers:");
+        lines.add("\t- None");
+
+        final Set<LockedSynchronizer> holdingLocks = ThreadInformationFactory.extractHoldingLocks(lines);
+        assertEquals(2, holdingLocks.size());
+
+        final Iterator<LockedSynchronizer> iterator = holdingLocks.iterator();
+
+        LockedSynchronizer synchronizer = iterator.next();
+        assertEquals("0x00000007d58f5e48", synchronizer.getThreadId());
+        assertEquals("io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor", synchronizer.getClassName());
+
+        synchronizer = iterator.next();
+        assertEquals("0x00000007d58f5e98", synchronizer.getThreadId());
+        assertEquals("io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor", synchronizer.getClassName());
+    }
+
+    @Test
+    public void extractHoldingLocksWhenNone() {
+        final List<String> lines = new ArrayList<>();
+
+        lines.add("\"DEADLOCK_TEST-1\" #3 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]");
+        lines.add("   java.lang.Thread.State: BLOCKED (on object monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)");
+        lines.add("");
+        lines.add("   Locked ownable synchronizers:");
+        lines.add("\t- None");
+
+        final Set<LockedSynchronizer> holdingLocks = ThreadInformationFactory.extractHoldingLocks(lines);
+        assertEquals(0, holdingLocks.size());
+    }
+
+    @Test
+    public void extractWaitingToLock() {
+        final List<String> lines = new ArrayList<>();
+
+        lines.add("\"DEADLOCK_TEST-1\" #3 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]");
+        lines.add("   java.lang.Thread.State: BLOCKED (on object monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)");
+        lines.add("\t- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e90> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:192)");
+        lines.add("\t- locked <0x00000007d58f5e98> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:170)");
+        lines.add("");
+        lines.add("   Locked ownable synchronizers:");
+        lines.add("\t- None");
+
+        final Set<LockedSynchronizer> waitingToLock = ThreadInformationFactory.extractWaitingToLock(lines);
+        assertEquals(2, waitingToLock.size());
+
+        final Iterator<LockedSynchronizer> iterator = waitingToLock.iterator();
+
+        LockedSynchronizer synchronizer = iterator.next();
+        assertEquals("0x00000007d58f5e60", synchronizer.getThreadId());
+        assertEquals("io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor", synchronizer.getClassName());
+
+        synchronizer = iterator.next();
+        assertEquals("0x00000007d58f5e90", synchronizer.getThreadId());
+        assertEquals("io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor", synchronizer.getClassName());
+    }
+
+    @Test
+    public void extractWaitingToLockWhenNone() {
+        final List<String> lines = new ArrayList<>();
+
+        lines.add("\"DEADLOCK_TEST-1\" #3 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]");
+        lines.add("   java.lang.Thread.State: BLOCKED (on object monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)");
+        lines.add("\t- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)");
+        lines.add("\t- locked <0x00000007d58f5e98> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:170)");
+        lines.add("");
+        lines.add("   Locked ownable synchronizers:");
+        lines.add("\t- None");
+
+        final Set<LockedSynchronizer> waitingToLock = ThreadInformationFactory.extractWaitingToLock(lines);
+        assertEquals(0, waitingToLock.size());
     }
 }

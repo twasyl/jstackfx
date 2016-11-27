@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
+<?import io.twasyl.jstackfx.ui.cells.ThreadListCellFactory?>
 <BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
     <stylesheets>
         <URL value="@/io/twasyl/jstackfx/css/default.css" />
@@ -48,6 +49,22 @@
                             <cellValueFactory>
                                 <PropertyValueFactory property="name" />
                             </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Blocking threads" sortable="false">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="blockingThreads" />
+                            </cellValueFactory>
+                            <cellFactory>
+                                <ThreadListCellFactory />
+                            </cellFactory>
+                        </TableColumn>
+                        <TableColumn text="Blocked threads" sortable="false">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="blockedThreads" />
+                            </cellValueFactory>
+                            <cellFactory>
+                                <ThreadListCellFactory />
+                            </cellFactory>
                         </TableColumn>
                     </columns>
                     <rowFactory>

@@ -1,6 +1,7 @@
 package io.twasyl.jstackfx.factory;
 
 import io.twasyl.jstackfx.beans.Dump;
+import io.twasyl.jstackfx.beans.ThreadInformation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,7 +81,9 @@ public class DumpFactory {
                             }
                         }
                     } else {
-                        dump.getElements().add(ThreadInformationFactory.build(lines.subList(beginningOfThreadIndex, endOfThreadIndex)));
+                        final ThreadInformation thread = ThreadInformationFactory.build(lines.subList(beginningOfThreadIndex, endOfThreadIndex));
+                        thread.setDump(dump);
+                        dump.getElements().add(thread);
                     }
 
                     beginningOfThreadFound = true;
