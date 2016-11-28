@@ -2,19 +2,19 @@ package io.twasyl.jstackfx.ui.cells;
 
 import de.jensd.fx.glyphs.octicons.OctIcon;
 import de.jensd.fx.glyphs.octicons.OctIconView;
-import io.twasyl.jstackfx.beans.ThreadInformation;
+import io.twasyl.jstackfx.beans.ThreadElement;
 import javafx.scene.control.TableCell;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Cell displaying an {@link OctIcon} according a {@link java.lang.Thread.State}.
+ * Cell displaying an {@link OctIcon} according a {@link Thread.State}.
  *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
-public class StateCell extends TableCell<ThreadInformation, Thread.State> {
+public class StateCell extends TableCell<ThreadElement, Thread.State> {
 
     private static final Map<Thread.State, OctIcon> ICONS = new HashMap<>();
 
@@ -27,12 +27,17 @@ public class StateCell extends TableCell<ThreadInformation, Thread.State> {
         ICONS.put(Thread.State.TERMINATED, OctIcon.CHECK);
     }
 
+    public StateCell() {
+        this.getStyleClass().add("state-cell");
+    }
+
     @Override
     protected void updateItem(Thread.State item, boolean empty) {
+        super.updateItem(item, empty);
         if (!empty && item != null) {
             final OctIcon icon = ICONS.get(item);
 
-            if(icon != null) {
+            if (icon != null) {
                 final OctIconView displayedIcon = new OctIconView(icon);
                 displayedIcon.setGlyphSize(20);
                 this.setGraphic(displayedIcon);

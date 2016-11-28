@@ -4,10 +4,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
+ * Represents a thread reference present in a thread dump. A reference is known as a thread ID and a class name.
+ * It typically appears as locked synchronizers, locks and so on in a thread dump.
+ *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
-public class LockedSynchronizer {
+public class ThreadReference {
     protected final StringProperty threadId = new SimpleStringProperty();
     protected final StringProperty className = new SimpleStringProperty();
 
@@ -24,7 +27,7 @@ public class LockedSynchronizer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LockedSynchronizer that = (LockedSynchronizer) o;
+        ThreadReference that = (ThreadReference) o;
 
         return getThreadId() != null ? getThreadId().equals(that.getThreadId()) : that.getThreadId() == null;
     }

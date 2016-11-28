@@ -1,8 +1,10 @@
 package io.twasyl.jstackfx.beans;
 
 /**
+ * Simple class for associating two objects.
+ *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
 public class Pair<K, V> {
     protected K value1;

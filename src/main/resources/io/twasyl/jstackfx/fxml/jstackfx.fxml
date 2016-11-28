@@ -2,15 +2,15 @@
 
 <?import de.jensd.fx.glyphs.octicons.OctIconView?>
 <?import io.twasyl.jstackfx.ui.cells.StateCellFactory?>
-<?import io.twasyl.jstackfx.ui.cells.ThreadInformationRowFactory?>
+<?import io.twasyl.jstackfx.ui.cells.ThreadElementRowFactory?>
+<?import io.twasyl.jstackfx.ui.cells.ThreadListCellFactory?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
-<?import io.twasyl.jstackfx.ui.cells.ThreadListCellFactory?>
 <BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
     <stylesheets>
         <URL value="@/io/twasyl/jstackfx/css/default.css" />
@@ -22,6 +22,26 @@
                 <graphic>
                     <OctIconView glyphName="FILE_TEXT" glyphSize="20" />
                 </graphic>
+                <tooltip>
+                    <Tooltip text="Open dump file" />
+                </tooltip>
+            </Button>
+            <Button fx:id="saveDumpButton" disable="true" onAction="#saveThreadDump">
+                <graphic>
+                    <OctIconView glyphName="DATABASE" glyphSize="20" />
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Save thread dump" />
+                </tooltip>
+            </Button>
+            <Separator />
+            <Button onAction="#makeThreadDump">
+                <graphic>
+                    <OctIconView glyphName="PULSE" glyphSize="20" />
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Take a thread dump" />
+                </tooltip>
             </Button>
         </ToolBar>
     </top>
@@ -50,7 +70,7 @@
                                 <PropertyValueFactory property="name" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Blocking threads" sortable="false">
+                        <TableColumn text="Blocking threads" prefWidth="200" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="blockingThreads" />
                             </cellValueFactory>
@@ -58,7 +78,7 @@
                                 <ThreadListCellFactory />
                             </cellFactory>
                         </TableColumn>
-                        <TableColumn text="Blocked threads" sortable="false">
+                        <TableColumn text="Blocked threads" prefWidth="200" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="blockedThreads" />
                             </cellValueFactory>
@@ -68,12 +88,12 @@
                         </TableColumn>
                     </columns>
                     <rowFactory>
-                        <ThreadInformationRowFactory />
+                        <ThreadElementRowFactory />
                     </rowFactory>
                 </TableView>
 
                 <ScrollPane>
-                    <TextFlow fx:id="threadInformationsDetails">
+                    <TextFlow fx:id="threadElementDetails">
                         <padding>
                             <Insets bottom="5" left="5" right="5" top="5" />
                         </padding>

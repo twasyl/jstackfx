@@ -1,26 +1,26 @@
 package io.twasyl.jstackfx.controllers;
 
 import io.twasyl.jstackfx.beans.Dump;
-import io.twasyl.jstackfx.beans.LockedSynchronizer;
-import io.twasyl.jstackfx.beans.ThreadInformation;
+import io.twasyl.jstackfx.beans.InMemoryDump;
+import io.twasyl.jstackfx.beans.ThreadElement;
+import io.twasyl.jstackfx.beans.ThreadReference;
+import io.twasyl.jstackfx.exceptions.DumpException;
 import io.twasyl.jstackfx.factory.DumpFactory;
 import javafx.beans.binding.StringExpression;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,38 +30,77 @@ import java.util.ResourceBundle;
  * Controller of the {@code jstack.fxml} file.
  *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
 public class JStackFXController implements Initializable {
 
     @FXML
-    private TableView<ThreadInformation> threadInformations;
+    private TableView<ThreadElement> threadInformations;
     @FXML
     private TextFlow dumpInformations;
     @FXML
-    private TextFlow threadInformationsDetails;
+    private TextFlow threadElementDetails;
     @FXML
     private PieChart threadsRepartition;
     @FXML
     private PieChart mostLockedSynchronizers;
+    @FXML
+    private Button saveDumpButton;
+
+    private final ObjectProperty<Dump> dump = new SimpleObjectProperty<>(null);
 
     @FXML
     private void chooseDumpToOpen(final ActionEvent event) {
         try {
             this.chooseDumpToOpen();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            showError(e);
+        }
+    }
+
+    @FXML
+    private void saveThreadDump(final ActionEvent event) {
+        final FileChooser fileSaver = new FileChooser();
+        fileSaver.setTitle("Save thread dump");
+        final File dumpFile = fileSaver.showSaveDialog(null);
+
+        if(dumpFile != null) {
+            try {
+                this.writeToDumpFile(dumpFile, this.dump.get());
+                this.loadDumpFile(dumpFile);
+            } catch (Exception e) {
+                showError(e);
+            }
+        }
+    }
+
+    @FXML
+    private void makeThreadDump(final ActionEvent event) {
+        final TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Enter the process ID to make the thread dump for:");
+        final String userAnswer = dialog.showAndWait().orElse(null);
+
+        if (userAnswer != null && !userAnswer.isEmpty()) {
+            final long pid = Long.parseLong(userAnswer);
+            try {
+                this.dumpPID(pid);
+            } catch (DumpException e) {
+                showError(e);
+            }
         }
     }
 
     /**
      * Opens a file chooser and open the dump file in the UI.
      */
-    protected void chooseDumpToOpen() throws IOException {
+    protected void chooseDumpToOpen() throws IOException, InstantiationException, IllegalAccessException {
         final FileChooser chooser = new FileChooser();
         chooser.setTitle("Open dump file");
         final File fileToOpen = chooser.showOpenDialog(null);
-        this.loadDumpFile(fileToOpen);
+
+        if (fileToOpen != null) {
+            this.loadDumpFile(fileToOpen);
+        }
     }
 
     /**
@@ -69,16 +108,45 @@ public class JStackFXController implements Initializable {
      *
      * @param file The dump file to open.
      */
-    public void loadDumpFile(final File file) throws IOException {
+    public void loadDumpFile(final File file) throws IOException, IllegalAccessException, InstantiationException {
         if (file == null) throw new NullPointerException("The file to open is null");
         if (!file.exists()) throw new FileNotFoundException("The file doesn't exist");
 
         final Dump dump = DumpFactory.read(file);
 
-        this.updateThreadInformationsTable(dump);
-        this.updateDumpInformations(dump);
-        this.updateThreadRepartionChart(dump);
-        this.updateMostLockedSynchronizesChart(dump);
+        this.updateUI(dump);
+        this.dump.set(dump);
+    }
+
+    /**
+     * Create a thread dump for the given PID.
+     * @param pid The PID of the process to dump.
+     * @throws DumpException
+     */
+    public void dumpPID(final long pid) throws DumpException {
+        final Dump dump = DumpFactory.make(pid);
+        this.updateUI(dump);
+        this.dump.set(dump);
+    }
+
+    public void updateUI(final Dump dump) {
+        if (dump != null) {
+            this.updateThreadInformationsTable(dump);
+            this.updateDumpInformations(dump);
+            this.updateThreadRepartionChart(dump);
+            this.updateMostLockedSynchronizesChart(dump);
+        }
+    }
+
+    protected void writeToDumpFile(final File dumpFile, final Dump dump) throws IOException {
+        if(dumpFile == null) throw new NullPointerException("The dump file can not be null");
+        if(dump == null) throw new NullPointerException("The dump to save can not be null");
+        if(!(dump instanceof InMemoryDump)) throw new IllegalArgumentException("The dump is not an in-memory dump");
+
+        try(final PrintWriter output = new PrintWriter(dumpFile)) {
+            ((InMemoryDump) dump).getLines().forEach(output::println);
+            output.flush();
+        }
     }
 
     protected void updateThreadInformationsTable(final Dump dump) {
@@ -90,7 +158,6 @@ public class JStackFXController implements Initializable {
     protected void updateDumpInformations(final Dump dump) {
         this.dumpInformations.getChildren().clear();
         this.dumpInformations.getChildren().addAll(dump.asText());
-        this.dumpInformations.setUserData(dump);
     }
 
     protected void updateThreadRepartionChart(final Dump dump) {
@@ -109,7 +176,7 @@ public class JStackFXController implements Initializable {
         final PieChart.Data terminatedThreads = new PieChart.Data(Thread.State.TERMINATED.name(), 0);
         this.addTooltipToData(terminatedThreads, "Terminated threads");
 
-        for (ThreadInformation information : dump.getElements()) {
+        for (ThreadElement information : dump.getElements()) {
             if (information.getState() != null) {
                 switch (information.getState()) {
                     case NEW:
@@ -138,8 +205,8 @@ public class JStackFXController implements Initializable {
     protected void updateMostLockedSynchronizesChart(final Dump dump) {
         final Map<String, PieChart.Data> data = new HashMap<>();
 
-        for (final ThreadInformation threadInformation : dump.getElements()) {
-            for (final LockedSynchronizer synchronizer : threadInformation.getLockedSynchronizers()) {
+        for (final ThreadElement thread : dump.getElements()) {
+            for (final ThreadReference synchronizer : thread.getLockedSynchronizers()) {
                 if (!data.containsKey(synchronizer.getClassName())) {
                     final PieChart.Data synchronizerData = new PieChart.Data(synchronizer.getClassName(), 0);
                     this.addTooltipToData(synchronizerData, synchronizerData.nameProperty());
@@ -173,13 +240,26 @@ public class JStackFXController implements Initializable {
         return tooltip;
     }
 
+    /**
+     * Show an error dialog to the end user for the provided exception.
+     * @param exception The exception that was thrown.
+     */
+    protected void showError(Exception exception) {
+        final Alert error = new Alert(Alert.AlertType.ERROR, exception.getMessage(), ButtonType.OK);
+        error.show();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.threadInformations.getSelectionModel().selectedItemProperty().addListener((value, oldItem, newItem) -> {
-            this.threadInformationsDetails.getChildren().clear();
+            this.threadElementDetails.getChildren().clear();
             if (newItem != null) {
-                this.threadInformationsDetails.getChildren().addAll(newItem.asText());
+                this.threadElementDetails.getChildren().addAll(newItem.asText());
             }
+        });
+
+        this.dump.addListener((value, oldDump, newDump) -> {
+            this.saveDumpButton.setDisable(newDump == null || !(newDump instanceof InMemoryDump));
         });
     }
 }

@@ -10,10 +10,13 @@ import javafx.scene.text.Text;
 import java.util.*;
 
 /**
+ * A thread element is a part in the thread dump that gives information about a thread. It typically has a number,
+ * various IDs and priorities, a name, a state among others.
+ *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
-public class ThreadInformation {
+public class ThreadElement {
     protected final ObjectProperty<Dump> dump = new SimpleObjectProperty<>();
     protected final StringProperty name = new SimpleStringProperty();
     protected final LongProperty number = new SimpleLongProperty();
@@ -22,152 +25,77 @@ public class ThreadInformation {
     protected final IntegerProperty priority = new SimpleIntegerProperty();
     protected final IntegerProperty osPriority = new SimpleIntegerProperty();
     protected final StringProperty threadId = new SimpleStringProperty();
-    protected final SetProperty<LockedSynchronizer> lockedSynchronizers = new SimpleSetProperty<>(FXCollections.observableSet());
-    protected final SetProperty<LockedSynchronizer> holdingLocks = new SimpleSetProperty<>(FXCollections.observableSet());
-    protected final SetProperty<LockedSynchronizer> waitingToLock = new SimpleSetProperty<>(FXCollections.observableSet());
+    protected final SetProperty<ThreadReference> lockedSynchronizers = new SimpleSetProperty<>(FXCollections.observableSet());
+    protected final SetProperty<ThreadReference> holdingLocks = new SimpleSetProperty<>(FXCollections.observableSet());
+    protected final SetProperty<ThreadReference> waitingToLock = new SimpleSetProperty<>(FXCollections.observableSet());
+    protected final SetProperty<ThreadReference> parkingReasons = new SimpleSetProperty<>(FXCollections.observableSet());
 
     public ObjectProperty<Dump> dumpProperty() { return dump; }
     public Dump getDump() { return dump.get(); }
     public void setDump(Dump dump) { this.dump.set(dump); }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
+    public StringProperty nameProperty() { return name; }
+    public String getName() { return name.get(); }
+    public void setName(String name) { this.name.set(name); }
 
-    public String getName() {
-        return name.get();
-    }
+    public LongProperty numberProperty() { return number; }
+    public long getNumber() { return number.get(); }
+    public void setNumber(long number) { this.number.set(number); }
 
-    public void setName(String name) {
-        this.name.set(name);
-    }
+    public ObjectProperty<Thread.State> stateProperty() { return state; }
+    public Thread.State getState() { return state.get(); }
+    public void setState(Thread.State state) { this.state.set(state); }
 
-    public LongProperty numberProperty() {
-        return number;
-    }
+    public StringProperty callingStackProperty() { return callingStack; }
+    public String getCallingStack() { return callingStack.get(); }
+    public void setCallingStack(String callingStack) { this.callingStack.set(callingStack); }
 
-    public long getNumber() {
-        return number.get();
-    }
+    public IntegerProperty priorityProperty() { return priority; }
+    public int getPriority() { return priority.get(); }
+    public void setPriority(int priority) { this.priority.set(priority); }
 
-    public void setNumber(long number) {
-        this.number.set(number);
-    }
+    public IntegerProperty osPriorityProperty() { return osPriority; }
+    public int getOsPriority() { return osPriority.get(); }
+    public void setOsPriority(int osPriority) { this.osPriority.set(osPriority); }
 
-    public ObjectProperty<Thread.State> stateProperty() {
-        return state;
-    }
+    public StringProperty threadIdProperty() { return threadId; }
+    public String getThreadId() { return threadId.get(); }
+    public void setThreadId(String threadId) { this.threadId.set(threadId); }
 
-    public Thread.State getState() {
-        return state.get();
-    }
+    public SetProperty<ThreadReference> lockedSynchronizersProperty() { return lockedSynchronizers; }
+    public ObservableSet<ThreadReference> getLockedSynchronizers() { return lockedSynchronizers.get(); }
+    public void setLockedSynchronizers(ObservableSet<ThreadReference> lockedSynchronizers) { this.lockedSynchronizers.set(lockedSynchronizers); }
 
-    public void setState(Thread.State state) {
-        this.state.set(state);
-    }
+    public SetProperty<ThreadReference> holdingLocksProperty() { return holdingLocks; }
+    public ObservableSet<ThreadReference> getHoldingLocks() { return holdingLocks.get(); }
+    public void setHoldingLocks(ObservableSet<ThreadReference> holdingLocks) { this.holdingLocks.set(holdingLocks); }
 
-    public StringProperty callingStackProperty() {
-        return callingStack;
-    }
+    public SetProperty<ThreadReference> waitingToLockProperty() { return waitingToLock; }
+    public ObservableSet<ThreadReference> getWaitingToLock() {return waitingToLock.get(); }
+    public void setWaitingToLock(ObservableSet<ThreadReference> waitingToLock) { this.waitingToLock.set(waitingToLock); }
 
-    public String getCallingStack() {
-        return callingStack.get();
-    }
-
-    public void setCallingStack(String callingStack) {
-        this.callingStack.set(callingStack);
-    }
-
-    public IntegerProperty priorityProperty() {
-        return priority;
-    }
-
-    public int getPriority() {
-        return priority.get();
-    }
-
-    public void setPriority(int priority) {
-        this.priority.set(priority);
-    }
-
-    public IntegerProperty osPriorityProperty() {
-        return osPriority;
-    }
-
-    public int getOsPriority() {
-        return osPriority.get();
-    }
-
-    public void setOsPriority(int osPriority) {
-        this.osPriority.set(osPriority);
-    }
-
-    public StringProperty threadIdProperty() {
-        return threadId;
-    }
-
-    public String getThreadId() {
-        return threadId.get();
-    }
-
-    public void setThreadId(String threadId) {
-        this.threadId.set(threadId);
-    }
-
-    public SetProperty<LockedSynchronizer> lockedSynchronizersProperty() {
-        return lockedSynchronizers;
-    }
-
-    public ObservableSet<LockedSynchronizer> getLockedSynchronizers() {
-        return lockedSynchronizers.get();
-    }
-
-    public void setLockedSynchronizers(ObservableSet<LockedSynchronizer> lockedSynchronizers) {
-        this.lockedSynchronizers.set(lockedSynchronizers);
-    }
-
-    public SetProperty<LockedSynchronizer> holdingLocksProperty() {
-        return holdingLocks;
-    }
-
-    public ObservableSet<LockedSynchronizer> getHoldingLocks() {
-        return holdingLocks.get();
-    }
-
-    public void setHoldingLocks(ObservableSet<LockedSynchronizer> holdingLocks) {
-        this.holdingLocks.set(holdingLocks);
-    }
-
-    public SetProperty<LockedSynchronizer> waitingToLockProperty() {
-        return waitingToLock;
-    }
-
-    public ObservableSet<LockedSynchronizer> getWaitingToLock() {
-        return waitingToLock.get();
-    }
-
-    public void setWaitingToLock(ObservableSet<LockedSynchronizer> waitingToLock) {
-        this.waitingToLock.set(waitingToLock);
-    }
+    public SetProperty<ThreadReference> parkingReasonsProperty() { return parkingReasons; }
+    public ObservableSet<ThreadReference> getParkingReasons() { return parkingReasons.get(); }
+    public void setParkingReasons(ObservableSet<ThreadReference> parkingReasons) { this.parkingReasons.set(parkingReasons); }
 
     /**
      * Get threads in the given {@link Dump dump} that are blocking this thread.
      *
      * @return A never {@code null} collection of threads blocking this instance.
      */
-    public Set<ThreadInformation> getBlockingThreads() {
-        final Set<ThreadInformation> blockingThreads = new HashSet<>();
+    public Set<ThreadElement> getBlockingThreads() {
+        final Set<ThreadElement> blockingThreads = new HashSet<>();
 
-        if (dump != null && !getDump().getElements().isEmpty()) {
-            for (final ThreadInformation threadInformation : getDump().getElements()) {
-                if (!Objects.equals(threadInformation, this)) {
-                    final long numberOfLocks = threadInformation.getHoldingLocks()
+        if (!getDump().getElements().isEmpty()) {
+            for (final ThreadElement thread : getDump().getElements()) {
+                if (!Objects.equals(thread, this)) {
+                    final long numberOfLocks = thread.getHoldingLocks()
                             .stream()
                             .filter(this.getWaitingToLock()::contains)
                             .count();
 
                     if(numberOfLocks > 0) {
-                        blockingThreads.add(threadInformation);
+                        blockingThreads.add(thread);
                     }
                 }
             }
@@ -181,19 +109,19 @@ public class ThreadInformation {
      *
      * @return A never {@code null} collection of threads blocked by this instance.
      */
-    public Set<ThreadInformation> getBlockedThreads() {
-        final Set<ThreadInformation> blockedThreads = new HashSet<>();
+    public Set<ThreadElement> getBlockedThreads() {
+        final Set<ThreadElement> blockedThreads = new HashSet<>();
 
-        if (dump != null && !getDump().getElements().isEmpty()) {
-            for (final ThreadInformation threadInformation : getDump().getElements()) {
-                if (!Objects.equals(threadInformation, this)) {
-                    final long numberOfLocks = threadInformation.getWaitingToLock()
+        if (!getDump().getElements().isEmpty()) {
+            for (final ThreadElement thread : getDump().getElements()) {
+                if (!Objects.equals(thread, this)) {
+                    final long numberOfLocks = thread.getWaitingToLock()
                             .stream()
                             .filter(this.getHoldingLocks()::contains)
                             .count();
 
                     if(numberOfLocks > 0) {
-                        blockedThreads.add(threadInformation);
+                        blockedThreads.add(thread);
                     }
                 }
             }
@@ -233,12 +161,36 @@ public class ThreadInformation {
         text.setFont(normal);
         texts.add(text);
 
+        if(!this.getParkingReasons().isEmpty()) {
+            text = new Text("Parking to wait for:\n\n");
+            text.setFont(bold);
+            texts.add(text);
+
+            for (final ThreadReference parkingReason : this.parkingReasons) {
+                text = new Text(parkingReason.getThreadId() + " (");
+                text.setFont(normal);
+                texts.add(text);
+
+                text = new Text(parkingReason.getClassName());
+                text.setFont(code);
+                texts.add(text);
+
+                text = new Text(")\n");
+                text.setFont(normal);
+                texts.add(text);
+            }
+
+            text = new Text("\n");
+            text.setFont(normal);
+            texts.add(text);
+        }
+
         if (!this.lockedSynchronizers.isEmpty()) {
             text = new Text("Locked synchronizers:\n\n");
             text.setFont(bold);
             texts.add(text);
 
-            for (final LockedSynchronizer locked : this.lockedSynchronizers) {
+            for (final ThreadReference locked : this.lockedSynchronizers) {
                 text = new Text(locked.getThreadId() + " (");
                 text.setFont(normal);
                 texts.add(text);
@@ -262,7 +214,7 @@ public class ThreadInformation {
             text.setFont(bold);
             texts.add(text);
 
-            for (final LockedSynchronizer locked : this.waitingToLock) {
+            for (final ThreadReference locked : this.waitingToLock) {
                 text = new Text(locked.getThreadId() + " (");
                 text.setFont(normal);
                 texts.add(text);
@@ -286,7 +238,7 @@ public class ThreadInformation {
             text.setFont(bold);
             texts.add(text);
 
-            for (final LockedSynchronizer locked : this.holdingLocks) {
+            for (final ThreadReference locked : this.holdingLocks) {
                 text = new Text(locked.getThreadId() + " (");
                 text.setFont(normal);
                 texts.add(text);

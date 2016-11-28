@@ -1,18 +1,19 @@
 package io.twasyl.jstackfx.factory;
 
-import io.twasyl.jstackfx.beans.LockedSynchronizer;
-import io.twasyl.jstackfx.beans.Pair;
-import io.twasyl.jstackfx.beans.ThreadInformation;
+import io.twasyl.jstackfx.beans.ThreadElement;
+import io.twasyl.jstackfx.beans.ThreadReference;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * This class is responsible for creating {@link ThreadElement thread elements} properly.
+ *
  * @author Thierry Wasylczenko
- * @since SlideshowFX @@NEXT-VERSION@@
+ * @since SlideshowFX 1.0
  */
-public class ThreadInformationFactory {
+public class ThreadElementFactory {
     protected static final Pattern LINE_STARTING_WITH_DASH = Pattern.compile("^\\s+-.+$");
     protected static final Pattern THREAD_NAME_PATTERN = Pattern.compile("^\\\"([^\\\"]+)\\\".+");
     protected static final Pattern THREAD_STATE_PATTERN = Pattern.compile("^\\s+java\\.lang\\.Thread\\.State: ([^ ]+).*$");
@@ -25,9 +26,10 @@ public class ThreadInformationFactory {
     protected static final Pattern LOCKED_SYNCHRONIZER_PATTERN = Pattern.compile("^\\s+-\\s<(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
     protected static final Pattern HOLDING_LOCKS_PATTERN = Pattern.compile("^\\s+- locked <(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
     protected static final Pattern WAITING_TO_LOCK_PATTERN = Pattern.compile("^\\s+- waiting to lock <(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
+    protected static final Pattern PARKING_TO_WAIT_FOR_PATTERN = Pattern.compile("^\\s+- parking to wait for\\s+<(0x[0-9a-f]+)>\\s\\(a ([a-zA-Z\\.\\$]+)\\)$");
 
-    public static ThreadInformation build(final List<String> lines) {
-        final ThreadInformation element = new ThreadInformation();
+    public static ThreadElement build(final List<String> lines) {
+        final ThreadElement element = new ThreadElement();
 
         String line = lines.get(0);
         element.setName(extractNameFrom(line));
@@ -45,6 +47,7 @@ public class ThreadInformationFactory {
         element.getLockedSynchronizers().addAll(extractLockedSynchronizersFrom(lines));
         element.getHoldingLocks().addAll(extractHoldingLocks(lines));
         element.getWaitingToLock().addAll(extractWaitingToLock(lines));
+        element.getParkingReasons().addAll(extractParkingToWaitFor(lines));
 
         return element;
     }
@@ -123,8 +126,8 @@ public class ThreadInformationFactory {
         return null;
     }
 
-    protected static Set<LockedSynchronizer> extractLockedSynchronizersFrom(final List<String> lines) {
-        final Set<LockedSynchronizer> synchronizers = new HashSet<>();
+    protected static Set<ThreadReference> extractLockedSynchronizersFrom(final List<String> lines) {
+        final Set<ThreadReference> synchronizers = new HashSet<>();
 
         boolean foundLockedOwnableSynchronizersLine = false;
         int index = 0;
@@ -146,7 +149,7 @@ public class ThreadInformationFactory {
                     final Matcher synchronizerMatcher = LOCKED_SYNCHRONIZER_PATTERN.matcher(line);
 
                     if (synchronizerMatcher.matches()) {
-                        final LockedSynchronizer synchronizer = new LockedSynchronizer();
+                        final ThreadReference synchronizer = new ThreadReference();
                         synchronizer.setThreadId(synchronizerMatcher.group(1));
                         synchronizer.setClassName(synchronizerMatcher.group(2));
                         synchronizers.add(synchronizer);
@@ -160,14 +163,14 @@ public class ThreadInformationFactory {
         return synchronizers;
     }
 
-    protected static Set<LockedSynchronizer> extractWaitingToLock(final List<String> lines) {
-        final Set<LockedSynchronizer> waitingToLock = new LinkedHashSet<>();
+    protected static Set<ThreadReference> extractWaitingToLock(final List<String> lines) {
+        final Set<ThreadReference> waitingToLock = new LinkedHashSet<>();
 
         for (final String line : lines) {
             final Matcher waitingToLockMatcher = WAITING_TO_LOCK_PATTERN.matcher(line);
 
             if(waitingToLockMatcher.matches()) {
-                final LockedSynchronizer synchronizer = new LockedSynchronizer();
+                final ThreadReference synchronizer = new ThreadReference();
                 synchronizer.setThreadId(waitingToLockMatcher.group(1));
                 synchronizer.setClassName(waitingToLockMatcher.group(2));
                 waitingToLock.add(synchronizer);
@@ -177,14 +180,14 @@ public class ThreadInformationFactory {
         return waitingToLock;
     }
 
-    protected static Set<LockedSynchronizer> extractHoldingLocks(final List<String> lines) {
-        final Set<LockedSynchronizer> holdingLocks = new LinkedHashSet<>();
+    protected static Set<ThreadReference> extractHoldingLocks(final List<String> lines) {
+        final Set<ThreadReference> holdingLocks = new LinkedHashSet<>();
 
         for (final String line : lines) {
             final Matcher holdingLocksMatcher = HOLDING_LOCKS_PATTERN.matcher(line);
 
             if(holdingLocksMatcher.matches()) {
-                final LockedSynchronizer synchronizer = new LockedSynchronizer();
+                final ThreadReference synchronizer = new ThreadReference();
                 synchronizer.setThreadId(holdingLocksMatcher.group(1));
                 synchronizer.setClassName(holdingLocksMatcher.group(2));
                 holdingLocks.add(synchronizer);
@@ -194,4 +197,20 @@ public class ThreadInformationFactory {
         return holdingLocks;
     }
 
+    protected static Set<ThreadReference> extractParkingToWaitFor(final List<String> lines) {
+        final Set<ThreadReference> parkingReasons = new LinkedHashSet<>();
+
+        for (final String line : lines) {
+            final Matcher parkingMatcher = PARKING_TO_WAIT_FOR_PATTERN.matcher(line);
+
+            if(parkingMatcher.matches()) {
+                final ThreadReference synchronizer = new ThreadReference();
+                synchronizer.setThreadId(parkingMatcher.group(1));
+                synchronizer.setClassName(parkingMatcher.group(2));
+                parkingReasons.add(synchronizer);
+            }
+        }
+
+        return parkingReasons;
+    }
 }

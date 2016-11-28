@@ -11,10 +11,10 @@ JStackFX requires the latest JDK 8 available on your system.
 
 # Build
 
-As JStackFX is currently under development, you have to build it manually in order to use it. In order to build it, ensure the JDK 8 is available and execute the following command:
+As JStackFX is currently under development, you can build it manually in order to have the latest version. In order to build it, ensure the JDK 8 is available and execute the following command:
 
 ```shell
-gradlew clean distZip
+gradlew clean assemble
 ```
 
 # Execution
@@ -30,6 +30,14 @@ In order to start JStackFX and open directly a dump file you can use the followi
 ```shell
 java -jar jstackfx-<version>.jar --file=/path/to/dump.txt
 ```
+
+In order to start JStackFX and make a thread dump of a given process you can use the following command:
+
+```shell
+java -jar jstackfx-<version>.jar --pid=<pid of the process to dump>
+```
+
+**Warning:** if both `--pid` and `--file` parameters are used, `--file` is ignored.
 
 # Screenshot
 

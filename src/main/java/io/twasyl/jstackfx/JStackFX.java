@@ -7,27 +7,31 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
+ * Application class of JStackFX.
+ *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
 public class JStackFX extends Application {
     protected static final String FILE_PARAMETER = "file";
+    protected static final String PID_PARAMETER = "pid";
 
     private File fileToOpenAtStartup = null;
+    private String pidToDumpAtStartup = null;
 
     @Override
     public void init() throws Exception {
         final Map<String, String> parameters = getParameters().getNamed();
 
-        if (parameters.containsKey(FILE_PARAMETER)) {
+        if(parameters.containsKey(PID_PARAMETER)) {
+            this.pidToDumpAtStartup = parameters.get(PID_PARAMETER);
+        } else if (parameters.containsKey(FILE_PARAMETER)) {
             this.fileToOpenAtStartup = new File(parameters.get(FILE_PARAMETER));
         }
     }
@@ -37,7 +41,17 @@ public class JStackFX extends Application {
         final FXMLLoader loader = new FXMLLoader(JStackFX.class.getResource("/io/twasyl/jstackfx/fxml/jstackfx.fxml"));
         final Parent root = loader.load();
 
-        if (this.fileToOpenAtStartup != null) {
+        if(this.pidToDumpAtStartup != null) {
+            final JStackFXController controller = loader.getController();
+            try {
+                final long pid = Long.parseLong(this.pidToDumpAtStartup);
+                controller.dumpPID(pid);
+            } catch (Exception e) {
+                final Alert errorDialog = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                errorDialog.setTitle("Can create thread dump for process " + this.pidToDumpAtStartup);
+                errorDialog.showAndWait();
+            }
+        } else if (this.fileToOpenAtStartup != null) {
             final JStackFXController controller = loader.getController();
             try {
                 controller.loadDumpFile(this.fileToOpenAtStartup);
@@ -52,7 +66,7 @@ public class JStackFX extends Application {
 
         stage.setScene(scene);
         stage.setTitle("JStackFX");
-//        stage.setMaximized(true);
+        stage.setMaximized(true);
         stage.show();
     }
 

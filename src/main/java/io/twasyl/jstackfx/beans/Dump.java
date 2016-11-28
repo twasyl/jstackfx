@@ -8,17 +8,22 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class representing a thread dump realized with the {@code jstack} tool.
+ *
  * @author Thierry Wasylczenko
- * @since jStackFX @@NEXT-VERSION@@
+ * @since JStackFX 1.0
  */
-public class Dump {
+public abstract class Dump {
+    protected static final DateTimeFormatter DATE_TIME_FORMATTER_OUTPUT = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+
     protected final ObjectProperty<LocalDateTime> generationDateTime = new SimpleObjectProperty<>();
     protected final StringProperty description = new SimpleStringProperty();
-    protected final ListProperty<ThreadInformation> elements = new SimpleListProperty<>(FXCollections.observableArrayList());
+    protected final ListProperty<ThreadElement> elements = new SimpleListProperty<>(FXCollections.observableArrayList());
     protected final IntegerProperty numberOfJNIRefs = new SimpleIntegerProperty(0);
 
     public ObjectProperty<LocalDateTime> generationDateTimeProperty() { return generationDateTime; }
@@ -29,9 +34,9 @@ public class Dump {
     public String getDescription() { return description.get(); }
     public void setDescription(String description) { this.description.set(description); }
 
-    public ListProperty<ThreadInformation> elementsProperty() { return elements; }
-    public ObservableList<ThreadInformation> getElements() { return elements.get(); }
-    public void setElements(ObservableList<ThreadInformation> elements) { this.elements.set(elements); }
+    public ListProperty<ThreadElement> elementsProperty() { return elements; }
+    public ObservableList<ThreadElement> getElements() { return elements.get(); }
+    public void setElements(ObservableList<ThreadElement> elements) { this.elements.set(elements); }
 
     public IntegerProperty numberOfJNIRefsProperty() { return numberOfJNIRefs; }
     public int getNumberOfJNIRefs() { return numberOfJNIRefs.get(); }
@@ -66,7 +71,7 @@ public class Dump {
         final Font normal = Font.font("Helvetica", FontWeight.NORMAL, 12);
         final Font code = Font.font("Courier New", FontWeight.NORMAL, 12);
 
-        Text text = new Text("Generated at " + this.getGenerationDateTime().toString());
+        Text text = new Text("Generated at " + DATE_TIME_FORMATTER_OUTPUT.format(this.getGenerationDateTime()));
         text.setFont(bold);
         texts.add(text);
 

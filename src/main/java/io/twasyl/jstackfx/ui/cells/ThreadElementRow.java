@@ -1,7 +1,7 @@
 package io.twasyl.jstackfx.ui.cells;
 
 import com.sun.javafx.css.PseudoClassState;
-import io.twasyl.jstackfx.beans.ThreadInformation;
+import io.twasyl.jstackfx.beans.ThreadElement;
 import javafx.css.PseudoClass;
 import javafx.scene.control.TableRow;
 
@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Class representing a {@link ThreadElement} within a {@link javafx.scene.control.TableView} of elements.
+ *
  * @author Thierry Wasylczenko
- * @since SlideshowFX @@NEXT-VERSION@@
+ * @since SlideshowFX 1.0
  */
-public class ThreadInformationRow extends TableRow<ThreadInformation> {
+public class ThreadElementRow extends TableRow<ThreadElement> {
 
     private static final Map<Thread.State, PseudoClass> PSEUDO_CLASS_STATES = new HashMap<>();
 
@@ -25,7 +27,9 @@ public class ThreadInformationRow extends TableRow<ThreadInformation> {
         PSEUDO_CLASS_STATES.put(Thread.State.TERMINATED, PseudoClassState.getPseudoClass("terminated"));
     }
     @Override
-    protected void updateItem(ThreadInformation item, boolean empty) {
+    protected void updateItem(ThreadElement item, boolean empty) {
+        super.updateItem(item, empty);
+
         PSEUDO_CLASS_STATES.forEach((sate, pseudoClass) -> {
             this.pseudoClassStateChanged(pseudoClass, false);
         });
