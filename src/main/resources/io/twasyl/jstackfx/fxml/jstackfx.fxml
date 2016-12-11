@@ -4,6 +4,7 @@
 <?import io.twasyl.jstackfx.ui.cells.StateCellFactory?>
 <?import io.twasyl.jstackfx.ui.cells.ThreadElementRowFactory?>
 <?import io.twasyl.jstackfx.ui.cells.ThreadListCellFactory?>
+<?import io.twasyl.jstackfx.ui.SearchField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
@@ -43,6 +44,8 @@
                     <Tooltip text="Take a thread dump" />
                 </tooltip>
             </Button>
+            <SearchField fx:id="searchField" prefColumnCount="25"
+                         searchingClass="io.twasyl.jstackfx.beans.ThreadElement" />
         </ToolBar>
     </top>
     <center>
@@ -50,7 +53,7 @@
 
             <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefWidth="800">
 
-                <TableView fx:id="threadInformations" editable="false">
+                <TableView fx:id="threadElements" editable="false">
                     <columns>
                         <TableColumn prefWidth="50" sortable="false" text="State">
                             <cellValueFactory>
