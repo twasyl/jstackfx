@@ -2,6 +2,7 @@ package io.twasyl.jstackfx.ui.cells;
 
 import io.twasyl.jstackfx.beans.ThreadElement;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseButton;
@@ -30,7 +31,7 @@ public class ThreadListCellFactory implements Callback<TableColumn<ThreadElement
                 if (item != null && !item.isEmpty() && !empty) {
                     final TextFlow threadList = buildThreadListGraphic(this, item);
 
-                    if(this.prefHeightProperty().isBound()) {
+                    if (this.prefHeightProperty().isBound()) {
                         this.prefHeightProperty().unbind();
                     }
 
@@ -70,6 +71,8 @@ public class ThreadListCellFactory implements Callback<TableColumn<ThreadElement
         threadText.getStyleClass().add("text");
 
         threadText.setOnMouseClicked(ThreadListCellFactory.this.buildMouseClickedEventHandler(cell, thread));
+        threadText.setOnMouseEntered(event -> threadText.setCursor(Cursor.HAND));
+
         return threadText;
     }
 

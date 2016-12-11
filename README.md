@@ -43,3 +43,34 @@ java -jar jstackfx-<version>.jar --pid=<pid of the process to dump>
 
 ![Screenshot of JStackFX](src/site/screenshots/JStackFX_01.png)
 ![Screenshot of JStackFX](src/site/screenshots/JStackFX_02.png)
+![Screenshot of JStackFX](src/site/screenshots/JStackFX_03.png)
+
+# Usage
+
+## Searching
+
+Use the search bar in JStackFX to filter results. A query must have the following syntax:
+
+```shell
+fieldName comparator value operand fieldName comparator value ...
+```
+
+* _fieldName_ can be: **state**, **number**, **threadId**, **priority** or **osPriority**
+* _comparator_ can be: **=** or **!=**
+* _operand_ can be: **and** or **or**
+
+<u>Examples:</u>
+
+* List all RUNNABLE threads:`state = runnable`
+* Display threads having number 10 or 20: `number = 10 or number = 20`
+* Display threads ha ving number 10 or thread having number 20 and is in state BLOCKED: `number = 10 or number = 20 and state = blocked`
+
+# Changes
+
+## Version 1.1
+
+**New and noteworthy:**
+
+* Adding a search bar for filtering results
+* Change the cursor when over a blocked or blocking thread in the table
+* Make some information of the thread copyable

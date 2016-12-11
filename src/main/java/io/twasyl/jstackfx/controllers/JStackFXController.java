@@ -6,6 +6,7 @@ import io.twasyl.jstackfx.beans.ThreadElement;
 import io.twasyl.jstackfx.beans.ThreadReference;
 import io.twasyl.jstackfx.exceptions.DumpException;
 import io.twasyl.jstackfx.factory.DumpFactory;
+import io.twasyl.jstackfx.ui.SearchField;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -25,6 +26,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Controller of the {@code jstack.fxml} file.
@@ -34,8 +36,10 @@ import java.util.ResourceBundle;
  */
 public class JStackFXController implements Initializable {
 
+    private static Logger LOGGER = Logger.getLogger(JStackFXController.class.getName());
+
     @FXML
-    private TableView<ThreadElement> threadInformations;
+    private TableView<ThreadElement> threadElements;
     @FXML
     private TextFlow dumpInformations;
     @FXML
@@ -46,6 +50,8 @@ public class JStackFXController implements Initializable {
     private PieChart mostLockedSynchronizers;
     @FXML
     private Button saveDumpButton;
+    @FXML
+    private SearchField searchField;
 
     private final ObjectProperty<Dump> dump = new SimpleObjectProperty<>(null);
 
@@ -64,7 +70,7 @@ public class JStackFXController implements Initializable {
         fileSaver.setTitle("Save thread dump");
         final File dumpFile = fileSaver.showSaveDialog(null);
 
-        if(dumpFile != null) {
+        if (dumpFile != null) {
             try {
                 this.writeToDumpFile(dumpFile, this.dump.get());
                 this.loadDumpFile(dumpFile);
@@ -120,6 +126,7 @@ public class JStackFXController implements Initializable {
 
     /**
      * Create a thread dump for the given PID.
+     *
      * @param pid The PID of the process to dump.
      * @throws DumpException
      */
@@ -131,6 +138,7 @@ public class JStackFXController implements Initializable {
 
     public void updateUI(final Dump dump) {
         if (dump != null) {
+            this.updateSearchField(dump);
             this.updateThreadInformationsTable(dump);
             this.updateDumpInformations(dump);
             this.updateThreadRepartionChart(dump);
@@ -139,20 +147,22 @@ public class JStackFXController implements Initializable {
     }
 
     protected void writeToDumpFile(final File dumpFile, final Dump dump) throws IOException {
-        if(dumpFile == null) throw new NullPointerException("The dump file can not be null");
-        if(dump == null) throw new NullPointerException("The dump to save can not be null");
-        if(!(dump instanceof InMemoryDump)) throw new IllegalArgumentException("The dump is not an in-memory dump");
+        if (dumpFile == null) throw new NullPointerException("The dump file can not be null");
+        if (dump == null) throw new NullPointerException("The dump to save can not be null");
+        if (!(dump instanceof InMemoryDump)) throw new IllegalArgumentException("The dump is not an in-memory dump");
 
-        try(final PrintWriter output = new PrintWriter(dumpFile)) {
+        try (final PrintWriter output = new PrintWriter(dumpFile)) {
             ((InMemoryDump) dump).getLines().forEach(output::println);
             output.flush();
         }
     }
 
+    protected void updateSearchField(final Dump dump) {
+        this.searchField.setDataSet(dump.getElements());
+    }
+
     protected void updateThreadInformationsTable(final Dump dump) {
-        this.threadInformations.getItems().clear();
-        dump.getElements().forEach(this.threadInformations.getItems()::add);
-        this.threadInformations.getSelectionModel().clearSelection();
+        this.threadElements.getSelectionModel().clearSelection();
     }
 
     protected void updateDumpInformations(final Dump dump) {
@@ -242,6 +252,7 @@ public class JStackFXController implements Initializable {
 
     /**
      * Show an error dialog to the end user for the provided exception.
+     *
      * @param exception The exception that was thrown.
      */
     protected void showError(Exception exception) {
@@ -251,12 +262,14 @@ public class JStackFXController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.threadInformations.getSelectionModel().selectedItemProperty().addListener((value, oldItem, newItem) -> {
+        this.threadElements.getSelectionModel().selectedItemProperty().addListener((value, oldItem, newItem) -> {
             this.threadElementDetails.getChildren().clear();
             if (newItem != null) {
                 this.threadElementDetails.getChildren().addAll(newItem.asText());
             }
         });
+
+        this.threadElements.itemsProperty().bind(this.searchField.resultsProperty());
 
         this.dump.addListener((value, oldDump, newDump) -> {
             this.saveDumpButton.setDisable(newDump == null || !(newDump instanceof InMemoryDump));

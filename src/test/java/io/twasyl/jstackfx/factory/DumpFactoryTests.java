@@ -77,8 +77,4 @@ public class DumpFactoryTests {
 
         assertEquals(9, dump.countThreadsWithoutStack());
     }
-
-    @Test public void toto() {
-        System.out.println(String.format("%.0f", 10.21));
-    }
 }

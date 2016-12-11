@@ -6,6 +6,10 @@
     -fx-thread-terminated: #5bc0de;
 }
 
+.tool-bar {
+    -fx-alignment: BASELINE_LEFT;
+}
+
 /** Table Cells */
 .table-view *.glyph-icon { -fx-fill: white; }
 
@@ -42,3 +46,8 @@
 .data2.chart-pie { -fx-pie-color: -fx-thread-waiting; }
 .data3.chart-pie { -fx-pie-color: -fx-thread-blocked; }
 .data4.chart-pie { -fx-pie-color: -fx-thread-terminated; }
+
+/** Search field */
+.search-field { -fx-alignment: BASELINE_LEFT; }
+.search-field .text-field { -fx-padding: 6px 7px 6px 30px; }
+.search-field .search { -fx-translate-x: 10px; }

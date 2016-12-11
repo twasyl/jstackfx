@@ -29,7 +29,7 @@ public class JStackFX extends Application {
     public void init() throws Exception {
         final Map<String, String> parameters = getParameters().getNamed();
 
-        if(parameters.containsKey(PID_PARAMETER)) {
+        if (parameters.containsKey(PID_PARAMETER)) {
             this.pidToDumpAtStartup = parameters.get(PID_PARAMETER);
         } else if (parameters.containsKey(FILE_PARAMETER)) {
             this.fileToOpenAtStartup = new File(parameters.get(FILE_PARAMETER));
@@ -41,7 +41,7 @@ public class JStackFX extends Application {
         final FXMLLoader loader = new FXMLLoader(JStackFX.class.getResource("/io/twasyl/jstackfx/fxml/jstackfx.fxml"));
         final Parent root = loader.load();
 
-        if(this.pidToDumpAtStartup != null) {
+        if (this.pidToDumpAtStartup != null) {
             final JStackFXController controller = loader.getController();
             try {
                 final long pid = Long.parseLong(this.pidToDumpAtStartup);
