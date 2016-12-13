@@ -45,6 +45,8 @@ public class JStackFXController implements Initializable {
     @FXML
     private TextFlow threadElementDetails;
     @FXML
+    private TextArea threadElementSource;
+    @FXML
     private PieChart threadsRepartition;
     @FXML
     private PieChart mostLockedSynchronizers;
@@ -138,6 +140,7 @@ public class JStackFXController implements Initializable {
 
     public void updateUI(final Dump dump) {
         if (dump != null) {
+            this.clearUI();
             this.updateSearchField(dump);
             this.updateThreadInformationsTable(dump);
             this.updateDumpInformations(dump);
@@ -155,6 +158,11 @@ public class JStackFXController implements Initializable {
             ((InMemoryDump) dump).getLines().forEach(output::println);
             output.flush();
         }
+    }
+
+    protected void clearUI() {
+        this.threadElementDetails.getChildren().clear();
+        this.threadElementSource.setText("");
     }
 
     protected void updateSearchField(final Dump dump) {
@@ -266,6 +274,7 @@ public class JStackFXController implements Initializable {
             this.threadElementDetails.getChildren().clear();
             if (newItem != null) {
                 this.threadElementDetails.getChildren().addAll(newItem.asText());
+                this.threadElementSource.setText(newItem.getSource());
             }
         });
 

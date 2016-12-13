@@ -6,12 +6,10 @@ import javafx.collections.ObservableSet;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
 import java.util.*;
 
@@ -39,6 +37,7 @@ public class ThreadElement {
     protected final SetProperty<ThreadReference> holdingLocks = new SimpleSetProperty<>(FXCollections.observableSet());
     protected final SetProperty<ThreadReference> waitingToLock = new SimpleSetProperty<>(FXCollections.observableSet());
     protected final SetProperty<ThreadReference> parkingReasons = new SimpleSetProperty<>(FXCollections.observableSet());
+    protected final StringProperty source = new SimpleStringProperty();
 
     public ObjectProperty<Dump> dumpProperty() {
         return dump;
@@ -182,6 +181,18 @@ public class ThreadElement {
 
     public void setParkingReasons(ObservableSet<ThreadReference> parkingReasons) {
         this.parkingReasons.set(parkingReasons);
+    }
+
+    public String getSource() {
+        return source.get();
+    }
+
+    public StringProperty sourceProperty() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source.set(source);
     }
 
     /**

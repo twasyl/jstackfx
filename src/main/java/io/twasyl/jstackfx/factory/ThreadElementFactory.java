@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * This class is responsible for creating {@link ThreadElement thread elements} properly.
  *
  * @author Thierry Wasylczenko
- * @since SlideshowFX 1.0
+ * @since JStackFX 1.0
  */
 public class ThreadElementFactory {
     protected static final Pattern LINE_STARTING_WITH_DASH = Pattern.compile("^\\s+-.+$");
@@ -30,6 +30,8 @@ public class ThreadElementFactory {
 
     public static ThreadElement build(final List<String> lines) {
         final ThreadElement element = new ThreadElement();
+
+        element.setSource(buildSource(lines));
 
         String line = lines.get(0);
         element.setName(extractNameFrom(line));
@@ -50,6 +52,12 @@ public class ThreadElementFactory {
         element.getParkingReasons().addAll(extractParkingToWaitFor(lines));
 
         return element;
+    }
+
+    protected static String buildSource(final List<String> lines) {
+        final StringJoiner source = new StringJoiner("\n");
+        lines.forEach(source::add);
+        return source.toString();
     }
 
     protected static String extractNameFrom(final String line) {

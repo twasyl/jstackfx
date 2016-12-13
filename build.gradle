@@ -1,5 +1,5 @@
 group 'io.twasyl'
-version '@@NEXT-VERSION@@'
+version '1.2'
 
 apply plugin: 'java'
 apply plugin: 'distribution'
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compile 'de.jensd:fontawesomefx-octicons:3.3.0-2'
+    compile 'de.jensd:fontawesomefx-octicons:4.3.0-1'
     testCompile 'junit:junit:4.12'
 }
 

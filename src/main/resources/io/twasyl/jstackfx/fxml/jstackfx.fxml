@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.octicons.OctIconView?>
+<?import de.jensd.fx.glyphs.octicons.*?>
 <?import io.twasyl.jstackfx.ui.cells.StateCellFactory?>
 <?import io.twasyl.jstackfx.ui.cells.ThreadElementRowFactory?>
 <?import io.twasyl.jstackfx.ui.cells.ThreadListCellFactory?>
@@ -12,40 +12,60 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
-<BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
+<BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
     <stylesheets>
-        <URL value="@/io/twasyl/jstackfx/css/default.css" />
+        <URL value="@/io/twasyl/jstackfx/css/default.css"/>
     </stylesheets>
+
+    <fx:define>
+        <ToggleButton fx:id="showAsCode">
+            <graphic>
+                <OctIconView glyphName="CODE" glyphSize="15"/>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="showAsDetails" selected="true">
+            <graphic>
+                <OctIconView glyphName="GRABBER" glyphSize="15"/>
+            </graphic>
+        </ToggleButton>
+        <ToggleGroup>
+            <toggles>
+                <fx:reference source="showAsDetails"/>
+                <fx:reference source="showAsCode"/>
+            </toggles>
+        </ToggleGroup>
+    </fx:define>
 
     <top>
         <ToolBar>
             <Button onAction="#chooseDumpToOpen">
                 <graphic>
-                    <OctIconView glyphName="FILE_TEXT" glyphSize="20" />
+                    <OctIconView glyphName="FILE_TEXT" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Open dump file" />
+                    <Tooltip text="Open dump file"/>
                 </tooltip>
             </Button>
             <Button fx:id="saveDumpButton" disable="true" onAction="#saveThreadDump">
                 <graphic>
-                    <OctIconView glyphName="DATABASE" glyphSize="20" />
+                    <OctIconView glyphName="DATABASE" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Save thread dump" />
+                    <Tooltip text="Save thread dump"/>
                 </tooltip>
             </Button>
-            <Separator />
+            <Separator/>
             <Button onAction="#makeThreadDump">
                 <graphic>
-                    <OctIconView glyphName="PULSE" glyphSize="20" />
+                    <OctIconView glyphName="PULSE" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Take a thread dump" />
+                    <Tooltip text="Take a thread dump"/>
                 </tooltip>
             </Button>
             <SearchField fx:id="searchField" prefColumnCount="25"
-                         searchingClass="io.twasyl.jstackfx.beans.ThreadElement" />
+                         searchingClass="io.twasyl.jstackfx.beans.ThreadElement"/>
         </ToolBar>
     </top>
     <center>
@@ -57,61 +77,81 @@
                     <columns>
                         <TableColumn prefWidth="50" sortable="false" text="State">
                             <cellValueFactory>
-                                <PropertyValueFactory property="state" />
+                                <PropertyValueFactory property="state"/>
                             </cellValueFactory>
                             <cellFactory>
-                                <StateCellFactory />
+                                <StateCellFactory/>
                             </cellFactory>
                         </TableColumn>
                         <TableColumn prefWidth="50" sortable="false" text="#" styleClass="centered-cell">
                             <cellValueFactory>
-                                <PropertyValueFactory property="number" />
+                                <PropertyValueFactory property="number"/>
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn prefWidth="300" sortable="false" text="Name">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn text="Blocking threads" prefWidth="200" sortable="false">
                             <cellValueFactory>
-                                <PropertyValueFactory property="blockingThreads" />
+                                <PropertyValueFactory property="blockingThreads"/>
                             </cellValueFactory>
                             <cellFactory>
-                                <ThreadListCellFactory />
+                                <ThreadListCellFactory/>
                             </cellFactory>
                         </TableColumn>
                         <TableColumn text="Blocked threads" prefWidth="200" sortable="false">
                             <cellValueFactory>
-                                <PropertyValueFactory property="blockedThreads" />
+                                <PropertyValueFactory property="blockedThreads"/>
                             </cellValueFactory>
                             <cellFactory>
-                                <ThreadListCellFactory />
+                                <ThreadListCellFactory/>
                             </cellFactory>
                         </TableColumn>
                     </columns>
                     <rowFactory>
-                        <ThreadElementRowFactory />
+                        <ThreadElementRowFactory/>
                     </rowFactory>
                 </TableView>
 
-                <ScrollPane>
-                    <TextFlow fx:id="threadElementDetails">
-                        <padding>
-                            <Insets bottom="5" left="5" right="5" top="5" />
-                        </padding>
-                    </TextFlow>
-                </ScrollPane>
+                <TabPane>
+                    <Tab closable="false">
+                        <graphic>
+                            <OctIconView glyphName="THREE_BARS" glyphSize="15" />
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Show details" />
+                        </tooltip>
+                        <ScrollPane>
+                            <TextFlow fx:id="threadElementDetails">
+                                <padding>
+                                    <Insets bottom="5" left="5" right="5" top="5"/>
+                                </padding>
+                            </TextFlow>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab closable="false">
+                        <graphic>
+                            <OctIconView glyphName="CODE" glyphSize="15" />
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Show source" />
+                        </tooltip>
+                        <TextArea fx:id="threadElementSource" editable="false" />
+                    </Tab>
+                </TabPane>
             </SplitPane>
 
             <SplitPane dividerPositions="0.3, 0.65" orientation="VERTICAL">
                 <TextFlow fx:id="dumpInformations">
                     <padding>
-                        <Insets bottom="5" left="5" right="5" top="5" />
+                        <Insets bottom="5" left="5" right="5" top="5"/>
                     </padding>
                 </TextFlow>
-                <PieChart fx:id="threadsRepartition" title="Thread repartition by state" labelsVisible="false" />
-                <PieChart fx:id="mostLockedSynchronizers" title="Locked synchronizers repartition" labelsVisible="false" />
+                <PieChart fx:id="threadsRepartition" title="Thread repartition by state" labelsVisible="false"/>
+                <PieChart fx:id="mostLockedSynchronizers" title="Locked synchronizers repartition"
+                          labelsVisible="false"/>
             </SplitPane>
 
         </SplitPane>

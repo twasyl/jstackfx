@@ -8,9 +8,10 @@ import io.twasyl.jstackfx.search.exceptions.UnparsableQueryException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -35,6 +36,7 @@ public class SearchField<T> extends StackPane {
 
     protected TextField textField = new TextField();
     protected OctIconView icon = new OctIconView(OctIcon.SEARCH);
+    protected Text numberOfResults = new Text();
 
     protected Query<T> query;
     protected final DoubleProperty prefColumnCount = new SimpleDoubleProperty();
@@ -48,9 +50,10 @@ public class SearchField<T> extends StackPane {
 
         this.prefColumnCount.bindBidirectional(this.textField.prefColumnCountProperty());
 
-        this.getChildren().addAll(this.textField, this.icon);
+        this.getChildren().addAll(this.textField, this.icon, this.numberOfResults);
 
         this.initializeKeyPressed();
+        this.initializeNumberOfResults();
     }
 
     protected void initializeKeyPressed() {
@@ -84,6 +87,14 @@ public class SearchField<T> extends StackPane {
                 }
             }
         });
+    }
+
+    protected void initializeNumberOfResults() {
+        this.numberOfResults.getStyleClass().add("number");
+        this.numberOfResults.setWrappingWidth(50);
+        this.numberOfResults.setTextAlignment(TextAlignment.RIGHT);
+        this.numberOfResults.translateXProperty().bind(this.textField.widthProperty().subtract(this.numberOfResults.wrappingWidthProperty()).subtract(5));
+        this.numberOfResults.textProperty().bind(this.resultsProperty().sizeProperty().asString().concat("/").concat(this.dataSetProperty().sizeProperty().asString()));
     }
 
     public DoubleProperty prefColumnCountProperty() {

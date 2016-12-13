@@ -327,4 +327,33 @@ public class ThreadElementFactoryTest {
         final Set<ThreadReference> parkingReasons = ThreadElementFactory.extractParkingToWaitFor(lines);
         assertEquals(0, parkingReasons.size());
     }
+
+    @Test
+    public void buildSource() {
+        final List<String> lines = new ArrayList<>();
+
+        lines.add("\"DEADLOCK_TEST-2\" #3 daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]");
+        lines.add("   java.lang.Thread.State: BLOCKED (on object monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)");
+        lines.add("\t- waiting to lock <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)");
+        lines.add("\t- locked <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)");
+        lines.add("\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)");
+        lines.add("");
+        lines.add("   Locked ownable synchronizers:");
+        lines.add("\t- <0x00000000e598a610> (a java.util.concurrent.ThreadPoolExecutor$Worker)");
+
+        final String expected = "\"DEADLOCK_TEST-2\" #3 daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]\n" +
+                "   java.lang.Thread.State: BLOCKED (on object monitor)\n" +
+                "\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)\n" +
+                "\t- waiting to lock <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)\n" +
+                "\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)\n" +
+                "\t- locked <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)\n" +
+                "\tat io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)\n" +
+                "\n" +
+                "   Locked ownable synchronizers:\n" +
+                "\t- <0x00000000e598a610> (a java.util.concurrent.ThreadPoolExecutor$Worker)";
+
+        assertEquals(expected, ThreadElementFactory.buildSource(lines));
+    }
 }

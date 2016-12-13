@@ -12,7 +12,7 @@ import java.util.Map;
  * Class representing a {@link ThreadElement} within a {@link javafx.scene.control.TableView} of elements.
  *
  * @author Thierry Wasylczenko
- * @since SlideshowFX 1.0
+ * @since JStackFX 1.0
  */
 public class ThreadElementRow extends TableRow<ThreadElement> {
 
@@ -26,6 +26,7 @@ public class ThreadElementRow extends TableRow<ThreadElement> {
         PSEUDO_CLASS_STATES.put(Thread.State.BLOCKED, PseudoClassState.getPseudoClass("blocked"));
         PSEUDO_CLASS_STATES.put(Thread.State.TERMINATED, PseudoClassState.getPseudoClass("terminated"));
     }
+
     @Override
     protected void updateItem(ThreadElement item, boolean empty) {
         super.updateItem(item, empty);

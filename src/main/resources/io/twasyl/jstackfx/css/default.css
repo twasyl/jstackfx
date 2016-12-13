@@ -49,5 +49,14 @@
 
 /** Search field */
 .search-field { -fx-alignment: BASELINE_LEFT; }
-.search-field .text-field { -fx-padding: 6px 7px 6px 30px; }
+.search-field .text-field { -fx-padding: 6px 60px 6px 30px; }
 .search-field .search { -fx-translate-x: 10px; }
+.search-field .number { -fx-fill: lightgray; }
+
+/** Thread element nodes */
+#threadElementDetails { -fx-padding: 5px ; }
+
+#threadElementSource { -fx-font-family: 'Courier New'; -fx-padding: 5px; }
+#threadElementSource,
+#threadElementSource .content,
+#threadElementSource .scroll-pane { -fx-background-color: transparent; }

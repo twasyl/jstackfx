@@ -39,11 +39,12 @@ java -jar jstackfx-<version>.jar --pid=<pid of the process to dump>
 
 **Warning:** if both `--pid` and `--file` parameters are used, `--file` is ignored.
 
-# Screenshot
+# Screenshot````
 
 ![Screenshot of JStackFX](src/site/screenshots/JStackFX_01.png)
 ![Screenshot of JStackFX](src/site/screenshots/JStackFX_02.png)
 ![Screenshot of JStackFX](src/site/screenshots/JStackFX_03.png)
+![Screenshot of JStackFX](src/site/screenshots/JStackFX_04.png)
 
 # Usage
 
@@ -63,9 +64,17 @@ fieldName comparator value operand fieldName comparator value ...
 
 * List all RUNNABLE threads:`state = runnable`
 * Display threads having number 10 or 20: `number = 10 or number = 20`
-* Display threads ha ving number 10 or thread having number 20 and is in state BLOCKED: `number = 10 or number = 20 and state = blocked`
+* Display threads having number 10 or thread having number 20 and is in state BLOCKED: `number = 10 or number = 20 and state = blocked`
 
-# Changes
+# Release notes
+
+## Version 1.2
+
+**New and noteworthy:**
+
+* Display the number of results in the search bar
+* Allow to display thread elements' source from the dump file
+* UX improvements
 
 ## Version 1.1
 
