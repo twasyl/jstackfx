@@ -1,5 +1,5 @@
 group 'io.twasyl'
-version '1.2'
+version '@@NEXT-VERSION@@'
 
 apply plugin: 'java'
 apply plugin: 'distribution'

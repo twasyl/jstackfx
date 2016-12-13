@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Class defining a query that can be made using the search bar.
@@ -35,13 +36,18 @@ public class Query<T> {
     protected static Map<String, Class> FIELD_TYPE_CACHE = new HashMap<>();
 
     static {
-        final StringJoiner comparatorsRegex = new StringJoiner("|", "(?<" + COMPARATOR_GROUP + ">", ")");
-        Arrays.stream(Comparator.values()).forEach(comparator -> comparatorsRegex.add(comparator.getRegexExpression()));
+        final String comparators = Arrays.stream(Comparator.values())
+                .map(Comparator::getRegexExpression)
+                .collect(Collectors.joining("|", "(?<" + COMPARATOR_GROUP + ">", ")"));
+
+        final String operands = Arrays.stream(Operand.values())
+                .map(Operand::getRegexExpression)
+                .collect(Collectors.joining("|", "(?<" + OPERAND_GROUP + ">", ")"));
 
         final StringBuilder expression = new StringBuilder("(?<").append(FIELD_NAME_GROUP).append(">[^\\s]+)")
-                .append("\\s*").append(comparatorsRegex.toString())
+                .append("\\s*").append(comparators)
                 .append("\\s*(?<").append(FIELD_VALUE_GROUP).append(">[^\\s]+)")
-                .append("\\s*(?<").append(OPERAND_GROUP).append(">or|and)?");
+                .append("\\s*").append(operands).append("?");
 
         EXPRESSION_PATTERN = Pattern.compile(expression.toString());
     }

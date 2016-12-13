@@ -8,7 +8,11 @@ package io.twasyl.jstackfx.search;
  */
 public enum Comparator {
     EQUAL("="),
-    DIFFERENT("!=");
+    DIFFERENT("!="),
+    LESS_OR_EQUAL("<="),
+    LESS("<"),
+    GREATER_OR_EQUAL(">="),
+    GREATER(">");
 
     private final String regexExpression;
 
@@ -41,6 +45,14 @@ public enum Comparator {
                 return compareTo == 0;
             } else if (this == DIFFERENT) {
                 return compareTo != 0;
+            } else if (this == LESS) {
+                return compareTo < 0;
+            } else if (this == LESS_OR_EQUAL) {
+                return compareTo <= 0;
+            } else if (this == GREATER) {
+                return compareTo > 0;
+            } else if (this == GREATER_OR_EQUAL) {
+                return compareTo >= 0;
             } else {
                 return true;
             }

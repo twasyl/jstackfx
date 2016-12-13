@@ -57,7 +57,7 @@ fieldName comparator value operand fieldName comparator value ...
 ```
 
 * _fieldName_ can be: **state**, **number**, **threadId**, **priority** or **osPriority**
-* _comparator_ can be: **=** or **!=**
+* _comparator_ can be: **=**, **!=**, **<=**, **<***, **>=** or **>**
 * _operand_ can be: **and** or **or**
 
 <u>Examples:</u>
@@ -67,6 +67,12 @@ fieldName comparator value operand fieldName comparator value ...
 * Display threads having number 10 or thread having number 20 and is in state BLOCKED: `number = 10 or number = 20 and state = blocked`
 
 # Release notes
+
+## Version @@NEXT-VERSION@@
+
+**New and noteworthy:**
+
+* Support for operators `<=`, `<`, `>=` and `>`
 
 ## Version 1.2
 
