@@ -48,7 +48,7 @@ java -jar jstackfx-<version>.jar --pid=<pid of the process to dump>
 
 # Usage
 
-## Searching
+## SearchingF
 
 Use the search bar in JStackFX to filter results. A query must have the following syntax:
 
@@ -68,11 +68,12 @@ fieldName comparator value operand fieldName comparator value ...
 
 # Release notes
 
-## Version @@NEXT-VERSION@@
+## Version 1.3
 
 **New and noteworthy:**
 
 * Support for operators `<=`, `<`, `>=` and `>`
+* UI improvements
 
 ## Version 1.2
 

@@ -138,4 +138,186 @@ public class FieldExpressionTest {
                 .build();
         assertTrue(fieldExpression.match(element));
     }
+
+    @Test
+    public void lowerOnNumber() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(2l)
+                .using(Comparator.LESS)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerOnNumberWhenGreater() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(0l)
+                .using(Comparator.LESS)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerOnStateWhenExpectedIsNull() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(null)
+                .using(Comparator.LESS)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerOrEqualOnNumber() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(2l)
+                .using(Comparator.LESS_OR_EQUAL)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerOrEqualOnNumberWhenEqual() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(2);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(2l)
+                .using(Comparator.LESS_OR_EQUAL)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerEqualOnNumberWhenGreater() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(0l)
+                .using(Comparator.LESS_OR_EQUAL)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void lowerOrEqualOnStateWhenExpectedIsNull() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(null)
+                .using(Comparator.LESS_OR_EQUAL)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOnNumber() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(2);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(1l)
+                .using(Comparator.GREATER)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOnNumberWhenLower() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(2l)
+                .using(Comparator.GREATER)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOnStateWhenExpectedIsNull() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(null)
+                .using(Comparator.GREATER)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOrEqualOnNumber() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(2);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(1l)
+                .using(Comparator.GREATER_OR_EQUAL)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOrEqualOnNumberWhenEqual() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(1l)
+                .using(Comparator.GREATER_OR_EQUAL)
+                .build();
+        assertTrue(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOrEqualOnNumberWhenLower() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(2l)
+                .using(Comparator.GREATER_OR_EQUAL)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
+
+    @Test
+    public void greaterOrEqualOnStateWhenExpectedIsNull() throws EvaluateException {
+        final ThreadElement element = new ThreadElement();
+        element.setNumber(1);
+
+        final FieldExpression<ThreadElement> fieldExpression = FieldExpression.Builder.create(ThreadElement.class)
+                .onField("number")
+                .withWalue(null)
+                .using(Comparator.GREATER_OR_EQUAL)
+                .build();
+        assertFalse(fieldExpression.match(element));
+    }
 }

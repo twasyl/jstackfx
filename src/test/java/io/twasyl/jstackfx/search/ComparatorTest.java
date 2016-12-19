@@ -52,4 +52,64 @@ public class ComparatorTest {
     public void testDifferentWithEqualStates() {
         assertFalse(Comparator.DIFFERENT.evaluate(Thread.State.NEW, Thread.State.NEW));
     }
+
+    @Test
+    public void testLower() {
+        assertTrue(Comparator.LESS.evaluate(1, 2));
+    }
+
+    @Test
+    public void testLowerWhenNot() {
+        assertFalse(Comparator.LESS.evaluate(2, 1));
+    }
+
+    @Test
+    public void testLowerWhenEqual() {
+        assertFalse(Comparator.LESS.evaluate(1, 1));
+    }
+
+    @Test
+    public void testLowerOrEqual() {
+        assertTrue(Comparator.LESS_OR_EQUAL.evaluate(1, 2));
+    }
+
+    @Test
+    public void testLowerOrEqualWhenNot() {
+        assertFalse(Comparator.LESS_OR_EQUAL.evaluate(2, 1));
+    }
+
+    @Test
+    public void testLowerOrEqualWhenEqual() {
+        assertTrue(Comparator.LESS_OR_EQUAL.evaluate(1, 1));
+    }
+
+    @Test
+    public void testGreater() {
+        assertTrue(Comparator.GREATER.evaluate(2, 1));
+    }
+
+    @Test
+    public void testGreaterWhenNot() {
+        assertFalse(Comparator.GREATER.evaluate(1, 2));
+    }
+
+    @Test
+    public void testGreaterWhenEqual() {
+        assertFalse(Comparator.GREATER.evaluate(1, 1));
+    }
+
+    @Test
+    public void testGreaterOrEqual() {
+        assertTrue(Comparator.GREATER_OR_EQUAL.evaluate(2, 1));
+    }
+
+    @Test
+    public void testGreaterOrEqualWhenNot() {
+        assertFalse(Comparator.GREATER_OR_EQUAL.evaluate(1, 2));
+    }
+
+    @Test
+    public void testGreaterOrEqualWhenEqual() {
+        assertTrue(Comparator.GREATER_OR_EQUAL.evaluate(1, 1));
+    }
 }

@@ -161,6 +161,7 @@ public class JStackFXController implements Initializable {
     }
 
     protected void clearUI() {
+        this.searchField.clear();
         this.threadElementDetails.getChildren().clear();
         this.threadElementSource.setText("");
     }

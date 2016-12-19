@@ -39,7 +39,7 @@ public class StateCell extends TableCell<ThreadElement, Thread.State> {
 
             if (icon != null) {
                 final OctIconView displayedIcon = new OctIconView(icon);
-                displayedIcon.setGlyphSize(20);
+                displayedIcon.setGlyphSize(18);
                 this.setGraphic(displayedIcon);
             } else {
                 this.setGraphic(null);
@@ -48,6 +48,4 @@ public class StateCell extends TableCell<ThreadElement, Thread.State> {
             setGraphic(null);
         }
     }
-
-
 }

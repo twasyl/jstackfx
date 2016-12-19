@@ -111,6 +111,54 @@ public class QueryTest {
     }
 
     @Test
+    public void matchQueryWithOperandAndOtherExpressionUsingLessOrEqual() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = RUNNABLE and number <= 20");
+
+        assertTrue(query.match(element));
+    }
+
+    @Test
+    public void matchQueryWithOperandAndOtherExpressionUsingLess() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = RUNNABLE and number < 21");
+
+        assertTrue(query.match(element));
+    }
+
+    @Test
+    public void matchQueryWithOperandAndOtherExpressionUsingGreaterOrEqual() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = RUNNABLE and number >= 20");
+
+        assertTrue(query.match(element));
+    }
+
+    @Test
+    public void matchQueryWithOperandAndOtherExpressionUsingGreater() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = RUNNABLE and number > 19");
+
+        assertTrue(query.match(element));
+    }
+
+    @Test
     public void doesntMatchQuery() throws UnparsableQueryException {
         final ThreadElement element = new ThreadElement();
         element.setState(Thread.State.RUNNABLE);
@@ -142,6 +190,54 @@ public class QueryTest {
 
         final Query<ThreadElement> query = Query.create(ThreadElement.class);
         query.parse("state = NEW and number = 20");
+
+        assertFalse(query.match(element));
+    }
+
+    @Test
+    public void doesntMatchQueryWithOperandAndOtherExpressionUsingLess() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = NEW and number < 20");
+
+        assertFalse(query.match(element));
+    }
+
+    @Test
+    public void doesntMatchQueryWithOperandAndOtherExpressionUsingLessOrEqual() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = NEW and number <= 19");
+
+        assertFalse(query.match(element));
+    }
+
+    @Test
+    public void doesntMatchQueryWithOperandAndOtherExpressionUsingGreater() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = NEW and number > 20");
+
+        assertFalse(query.match(element));
+    }
+
+    @Test
+    public void doesntMatchQueryWithOperandAndOtherExpressionUsingGreaterOrEqual() throws UnparsableQueryException {
+        final ThreadElement element = new ThreadElement();
+        element.setState(Thread.State.RUNNABLE);
+        element.setNumber(20);
+
+        final Query<ThreadElement> query = Query.create(ThreadElement.class);
+        query.parse("state = NEW and number > 21");
 
         assertFalse(query.match(element));
     }

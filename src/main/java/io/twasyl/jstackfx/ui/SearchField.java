@@ -97,6 +97,13 @@ public class SearchField<T> extends StackPane {
         this.numberOfResults.textProperty().bind(this.resultsProperty().sizeProperty().asString().concat("/").concat(this.dataSetProperty().sizeProperty().asString()));
     }
 
+    /**
+     * Clear the content of the search field.
+     */
+    public void clear() {
+        this.textField.clear();
+    }
+
     public DoubleProperty prefColumnCountProperty() {
         return prefColumnCount;
     }
