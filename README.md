@@ -57,7 +57,7 @@ fieldName comparator value operand fieldName comparator value ...
 ```
 
 * _fieldName_ can be: **state**, **number**, **threadId**, **priority** or **osPriority**
-* _comparator_ can be: **=**, **!=**, **<=**, **<***, **>=** or **>**
+* _comparator_ can be: **=**, **!=**, **<=**, **<**, **>=** or **>**
 * _operand_ can be: **and** or **or**
 
 <u>Examples:</u>
