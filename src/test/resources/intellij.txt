@@ -1,5 +1,5 @@
 2016-11-22 20:30:25
-Full thread dump OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
+Full thread dumpTimeline OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
 
 "RMI TCP Connection(6)-127.0.0.1" #127 daemon prio=9 os_prio=31 tid=0x00007f84665b6800 nid=0x147db runnable [0x00007000078f0000]
    java.lang.Thread.State: RUNNABLE
@@ -21,6 +21,12 @@ Full thread dump OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
 
+   Locked ownable synchronizers:
+	- <0x00000000e598a610> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+	- <0x00000000e598a611> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+	- <0x00000000e598a612> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+	- <0x00000000e598a613> (a java.util.concurrent.ThreadPoolExecutor$Worker)
+
 "RMI TCP Connection(5)-127.0.0.1" #126 daemon prio=9 os_prio=31 tid=0x00007f8465b69000 nid=0x1357 runnable [0x00007000077ed000]
    java.lang.Thread.State: BLOCKED
 	at java.net.SocketInputStream.socketRead0(Native Method)
@@ -40,6 +46,10 @@ Full thread dump OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
+
+   Locked ownable synchronizers:
+	- <0x00000000e598a614> (a io.twasyl.jstackfx.Test)
+	- <0x00000000e598a615> (a io.twasyl.jstackfx.Test)
 
 "RMI TCP Connection(4)-127.0.0.1" #125 daemon prio=9 os_prio=31 tid=0x00007f8466649000 nid=0x142b runnable [0x00007000076ea000]
    java.lang.Thread.State: TERMINATED

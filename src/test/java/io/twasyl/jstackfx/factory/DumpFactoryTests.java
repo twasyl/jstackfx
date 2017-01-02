@@ -4,6 +4,8 @@ import io.twasyl.jstackfx.beans.Dump;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -76,5 +78,53 @@ public class DumpFactoryTests {
         final Dump dump = DumpFactory.read(DUMP_FILE);
 
         assertEquals(9, dump.countThreadsWithoutStack());
+    }
+
+    @Test
+    public void countNumberOfNewStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(1), counters.get(Thread.State.NEW));
+    }
+
+    @Test
+    public void countNumberOfRunnableStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(20), counters.get(Thread.State.RUNNABLE));
+    }
+
+    @Test
+    public void countNumberOfWaitingStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(9), counters.get(Thread.State.WAITING));
+    }
+
+    @Test
+    public void countNumberOfTimedWaitingStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(11), counters.get(Thread.State.TIMED_WAITING));
+    }
+
+    @Test
+    public void countNumberOfBlockedStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(1), counters.get(Thread.State.BLOCKED));
+    }
+
+    @Test
+    public void countNumberOfTerminatedStateByRepartition() throws Exception {
+        final Dump dump = DumpFactory.read(DUMP_FILE);
+        final Map<Thread.State, Long> counters = dump.countNumberOfThreadsByState();
+
+        assertEquals(new Long(1), counters.get(Thread.State.TERMINATED));
     }
 }

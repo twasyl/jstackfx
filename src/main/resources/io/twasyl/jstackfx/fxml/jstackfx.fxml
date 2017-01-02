@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
+<?import io.twasyl.jstackfx.ui.charts.StateRepartitionChart?>
+<?import io.twasyl.jstackfx.ui.charts.LockedSynchronizersRepartitionChartTest?>
 <BorderPane fx:id="root" minHeight="768" minWidth="1024" xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/8.0.112" fx:controller="io.twasyl.jstackfx.controllers.JStackFXController">
     <stylesheets>
@@ -44,7 +46,7 @@
                     <OctIconView glyphName="FILE_TEXT" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Open dump file"/>
+                    <Tooltip text="Open dumpTimeline file"/>
                 </tooltip>
             </Button>
             <Button fx:id="saveDumpButton" disable="true" onAction="#saveThreadDump">
@@ -52,7 +54,7 @@
                     <OctIconView glyphName="DATABASE" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Save thread dump"/>
+                    <Tooltip text="Save thread dumpTimeline"/>
                 </tooltip>
             </Button>
             <Separator/>
@@ -61,7 +63,7 @@
                     <OctIconView glyphName="PULSE" glyphSize="20"/>
                 </graphic>
                 <tooltip>
-                    <Tooltip text="Take a thread dump"/>
+                    <Tooltip text="Take a thread dumpTimeline"/>
                 </tooltip>
             </Button>
             <SearchField fx:id="searchField" prefColumnCount="25"
@@ -149,9 +151,8 @@
                         <Insets bottom="5" left="5" right="5" top="5"/>
                     </padding>
                 </TextFlow>
-                <PieChart fx:id="threadsRepartition" title="Thread repartition by state" labelsVisible="false"/>
-                <PieChart fx:id="mostLockedSynchronizers" title="Locked synchronizers repartition"
-                          labelsVisible="false"/>
+                <StateRepartitionChart fx:id="threadsRepartition" />
+                <LockedSynchronizersRepartitionChart fx:id="mostLockedSynchronizers" />
             </SplitPane>
 
         </SplitPane>

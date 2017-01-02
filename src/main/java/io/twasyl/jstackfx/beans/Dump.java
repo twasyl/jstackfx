@@ -10,7 +10,10 @@ import javafx.scene.text.Text;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Class representing a thread dump realized with the {@code jstack} tool.
@@ -19,7 +22,7 @@ import java.util.List;
  * @since JStackFX 1.0
  */
 public abstract class Dump {
-    protected static final DateTimeFormatter DATE_TIME_FORMATTER_OUTPUT = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER_OUTPUT = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
 
     protected final ObjectProperty<LocalDateTime> generationDateTime = new SimpleObjectProperty<>();
     protected final StringProperty description = new SimpleStringProperty();
@@ -62,6 +65,19 @@ public abstract class Dump {
         return this.getElements().stream()
                 .filter(thread -> thread.getState() == state)
                 .count();
+    }
+
+    /**
+     * Get the number of thread by state.
+     * @return A map containing for each state, the number of threads in this state.
+     */
+    public Map<Thread.State, Long> countNumberOfThreadsByState() {
+
+        return this.getElements().stream()
+                .collect(
+                        Collectors.groupingBy(
+                                ThreadElement::getState,
+                                Collectors.counting()));
     }
 
     public List<Text> asText() {

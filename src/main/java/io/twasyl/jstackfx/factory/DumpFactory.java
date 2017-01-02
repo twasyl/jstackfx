@@ -17,6 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static io.twasyl.jstackfx.beans.Dump.DATE_TIME_FORMATTER_OUTPUT;
+
 /**
  * This class is responsible for creating correctly {@link Dump dumps} instances. {@link Dump Dumps} can be instantiated
  * from a files or from a collections of lines representing the thread dump.
@@ -68,7 +70,7 @@ public class DumpFactory {
         if (!lines.isEmpty()) {
             dump = dumpClass.newInstance();
 
-            dump.setGenerationDateTime(LocalDateTime.parse(lines.get(0), DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")));
+            dump.setGenerationDateTime(LocalDateTime.parse(lines.get(0), DATE_TIME_FORMATTER_OUTPUT));
             dump.setDescription(lines.get(1));
 
             int beginningOfThreadIndex = 3;

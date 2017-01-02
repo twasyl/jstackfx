@@ -25,16 +25,16 @@ In order to start JStackFX, unzip the `build/distributions/JStackFX-<version>.zi
 java -jar jstackfx-<version>.jar
 ```
 
-In order to start JStackFX and open directly a dump file you can use the following command:
+In order to start JStackFX and open directly a dumpTimeline file you can use the following command:
 
 ```shell
-java -jar jstackfx-<version>.jar --file=/path/to/dump.txt
+java -jar jstackfx-<version>.jar --file=/path/to/dumpTimeline.txt
 ```
 
-In order to start JStackFX and make a thread dump of a given process you can use the following command:
+In order to start JStackFX and make a thread dumpTimeline of a given process you can use the following command:
 
 ```shell
-java -jar jstackfx-<version>.jar --pid=<pid of the process to dump>
+java -jar jstackfx-<version>.jar --pid=<pid of the process to dumpTimeline>
 ```
 
 **Warning:** if both `--pid` and `--file` parameters are used, `--file` is ignored.
@@ -80,7 +80,7 @@ fieldName comparator value operand fieldName comparator value ...
 **New and noteworthy:**
 
 * Display the number of results in the search bar
-* Allow to display thread elements' source from the dump file
+* Allow to display thread elements' source from the dumpTimeline file
 * UX improvements
 
 ## Version 1.1

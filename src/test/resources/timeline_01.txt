@@ -1,8 +1,8 @@
 2016-11-22 20:30:25
 Full thread dumpTimeline OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
 
-"DEADLOCK_TEST-1" #4 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
-   java.lang.Thread.State: BLOCKED (on object monitor)
+"Thread 6" #6 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
+   java.lang.Thread.State: NEW (on object monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
 	- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
@@ -12,8 +12,19 @@ Full thread dumpTimeline OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
    Locked ownable synchronizers:
 	- None
 
-"DEADLOCK_TEST-2" #3 daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]
-   java.lang.Thread.State: BLOCKED (on object monitor)
+"Thread 5" #5 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
+   java.lang.Thread.State: RUNNABLE (on object monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+	- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+	- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+	- None
+
+"Thread 4" #4 daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]
+   java.lang.Thread.State: WAITING (on object monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
 	- waiting to lock <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
@@ -23,7 +34,18 @@ Full thread dumpTimeline OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
    Locked ownable synchronizers:
 	- <0x00000000e598a610> (a java.util.concurrent.ThreadPoolExecutor$Worker)
 
-"DEADLOCK_TEST-3" #2 daemon prio=6 tid=0x0000000006859000 nid=0x25dc waiting for monitor entry [0x000000000825f000]
+"Thread 3" #3 daemon prio=6 tid=0x0000000006859000 nid=0x25dc waiting for monitor entry [0x000000000825f000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+	- waiting to lock <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+	- locked <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+	- None
+
+"Thread 2" #2 daemon prio=6 tid=0x0000000006859001 nid=0x25dd waiting for monitor entry [0x000000000825f000]
    java.lang.Thread.State: BLOCKED (on object monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
 	- waiting to lock <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
@@ -34,12 +56,12 @@ Full thread dumpTimeline OpenJDK 64-Bit Server VM (25.112-b2 mixed mode):
    Locked ownable synchronizers:
 	- None
 
-"DEADLOCK_TEST-4" #1 daemon prio=6 tid=0x0000000006859001 nid=0x25dd waiting for monitor entry [0x000000000825f000]
-   java.lang.Thread.State: BLOCKED (on object monitor)
+"Thread 1" #1 daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
+   java.lang.Thread.State: TERMINATED (on object monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
-	- waiting to lock <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	- waiting to lock <0x00000007d58f5e60> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
-	- locked <0x00000007d58f5e78> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
+	- locked <0x00000007d58f5e48> (a io.twasyl.jstackfx.examples.ThreadDeadLockState$Monitor)
 	at io.twasyl.jstackfx.examples.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
 
    Locked ownable synchronizers:
